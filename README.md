@@ -20,7 +20,7 @@ Experience a 3D Play Area: Dive into an immersive environment for the mini-game.
 
 Inspired by the joy of pet ownership and the importance of responsible care, we aim to make people more aware of animals in need and the fun of interacting with them, all within an engaging and playful setting.
 
-# Core Functionality
+## Core Functionality
 To stimulate continuous engagement and learning, "Adopt & Learn" features a unique gameplay loop:
 
 Timed Adoption System: Every 2 hours (set to 2 minutes in development for quick demonstration), users are eligible to adopt a new animal companion from the available selection. This encourages regular visits and interaction.
