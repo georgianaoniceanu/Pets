@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play with Your Buddy</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #d6f5f0;
+            background-image: url('background-chase.jpg'); /* New: Background image */
+            background-size: cover; /* New: Cover the entire body */
+            background-position: center; /* New: Center the background image */
+            /* Add this for a subtle background effect behind the start screen */
+            background-attachment: fixed;
+        }
+        canvas { display: block; }
+        #info {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            background-color: rgba(212, 92, 184, 0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 100;
+        }
+        #info img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            border: 3px solid #ff769e;
+            object-fit: cover;
+        }
+        #info span {
+            font-weight: 700;
+        }
+        #instructions {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            background-color: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: right;
+            line-height: 1.6;
+            z-index: 100;
+        }
+        #instructions strong {
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 5px;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 18px;
+            background-color: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 200;
+        }
+        #error {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff6b6b;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+            background-color: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 200;
+            display: none;
+        }
+        #score {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 24px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.3);
+            padding: 10px 20px;
+            border-radius: 10px;
+            z-index: 100;
+        }
+        #gameOverScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 48px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+            z-index: 300;
+            display: none;
+        }
+        #gameOverScreen button {
+            background-color: #ff769e;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        #gameOverScreen button:hover {
+            background-color: #e65c82;
+        }
+        #evadeScoreDisplay {
+            position: absolute;
+            top: 60px; /* Below the collectible score */
+            right: 15px;
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            background-color: rgba(0,0,0,0.3);
+            padding: 8px 15px;
+            border-radius: 8px;
+            z-index: 100;
+        }
+        /* New styles for the start screen */
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(222, 89, 164, 0.7); /* Slightly more transparent */
+            backdrop-filter: blur(5px); /* Add a blur effect */
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 400;
+        }
+        #startScreen h1 {
+            font-size: 68px; /* Slightly larger font size */
+            margin-bottom: 30px; /* Increased margin */
+            text-shadow: 4px 4px 10px rgba(0,0,0,0.9); /* Stronger shadow */
+        }
+        #startScreen p {
+            font-size: 26px; /* Slightly larger font size */
+            max-width: 800px;
+            margin-bottom: 50px; /* Increased margin */
+            line-height: 1.6; /* Improved line height */
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.7);
+        }
+        #startScreen button {
+            background-color: #4CAF50; /* Changed to green */
+            color: white;
+            border: none;
+            padding: 22px 45px; /* Slightly larger padding */
+            font-size: 34px; /* Slightly larger font size */
+            border-radius: 20px; /* More rounded corners */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease; /* Added transform for hover */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5); /* Stronger shadow */
+        }
+        #startScreen button:hover {
+            background-color: #45a049; /* Darker green on hover */
+            transform: translateY(-3px); /* Lift button on hover */
+            box-shadow: 0 12px 25px rgba(0,0,0,0.7); /* Even stronger shadow on hover */
+        }
+        #dangerOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Allows clicks/interactions to pass through */
+            z-index: 250; /* Above game elements, below game over/start screen */
+            display: none; /* Hidden by default */
+            background-color: rgba(255, 0, 0, 0); /* Start fully transparent */
+        }
+        /* New style for the back to site button */
+        #backToSiteButton {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px; /* Space between restart and back button */
+            transition: background-color 0.3s ease;
+        }
+        #backToSiteButton:hover {
+            background-color: #333;
+        }
+
+        /* Styles for the new cash award popup */
+        #cashAwardPopup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 128, 0, 0.9); /* Green background */
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 32px;
+            z-index: 500; /* Above all other elements */
+            display: none; /* Hidden by default */
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.7); /* Green glow */
+            animation: fadeInOut 4s forwards; /* Animation for display */
+        }
+
+        #cashAwardPopup .icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        }
+
+        /* Styles for audio controls */
+        #audioControls {
+            position: absolute;
+            bottom: 15px;
+            left: 15px;
+            background-color: rgba(0,0,0,0.5);
+            padding: 10px 15px;
+            border-radius: 10px;
+            z-index: 100;
+            display: flex; /* Use flexbox for alignment */
+            align-items: center; /* Vertically align items */
+            gap: 10px; /* Space between items */
+            color: white; /* Text color */
+            font-family: 'Quicksand', sans-serif;
+            font-size: 16px;
+        }
+        #audioControls button {
+            background-color: #ff769e;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #audioControls button:hover {
+            background-color: #e65c82;
+        }
+        #audioControls input[type="range"] {
+            width: 100px;
+            /*-webkit-appearance: none; /* Override default look */
+            height: 8px; /* Thinner slider */
+            border-radius: 5px;
+            background: #d3d3d3; /* Light grey track */
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        #audioControls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ff769e; /* Pink thumb */
+            cursor: pointer;
+        }
+        #audioControls input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ff769e;
+            cursor: pointer;
+        }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div id="dangerOverlay"></div>
+
+    <div id="startScreen">
+        <h1>Cat-ch Me If You Can</h1>
+        <p>You're a playful cat on the loose! Collect all the delicious mice while cleverly avoiding the mischievous dog. Use your agility and quick reflexes to outsmart your canine rival and gather all the treats. Good luck!</p>
+        <button id="startGameButton">Start Game</button>
+    </div>
+
+    <div id="loading">Loading your buddy...</div>
+    
+    <div id="error">
+        <h3>Unable to load 3D model</h3>
+        <p>Playing with a simple placeholder instead!</p>
+    </div>
+
+    <div id="info" style="display:none;">
+        <img id="buddyImg" src="" alt="Your Buddy" style="display:none;">
+        <span>Playing with: <strong id="buddyName">Your Buddy</strong></span>
+    </div>
+
+    <div id="instructions" style="display:none;">
+        <strong>Controls:</strong>
+        W / A / S / D - Move<br>
+        Spacebar - Jump<br>
+        Mouse - Rotate Camera<br>
+        Collect the **mice**!<br>
+        **AVOID THE DOG!**
+    </div>
+
+    <div id="score" style="display:none;">Mice: <span id="currentScore">0</span></div>
+    <div id="evadeScoreDisplay" style="display:none;">Evade Score: <span id="currentEvadeScore">0</span></div>
+
+    <div id="gameOverScreen">
+        <span id="gameOverText">GAME OVER!</span>
+        <div style="font-size: 28px; margin-top: 10px;">You evaded the dog for <span id="finalEvadeScore">0</span> seconds!</div>
+        <div style="font-size: 28px;">You collected <span id="finalMiceScore">0</span> mice!</div>
+        <button id="restartButton">Restart</button>
+        <button id="backToSiteButton">Back to Site</button> 
+    </div>
+
+    <div id="cashAwardPopup">
+        <div class="icon">💰</div>
+        <span id="cashAwardMessage"></span>
+    </div>
+
+    <div id="audioControls" style="display:none;">
+        <button id="toggleMusicButton">Mute Music</button>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script>
+        // Basic Three.js setup
+        const scene = new THREE.Scene();
+        
+        // Load grass.jpeg as background for the scene
+        const textureLoader = new THREE.TextureLoader(); 
+        textureLoader.load('grass.jpeg', function(texture) {
+            scene.background = texture;
+        }, undefined, function(err) {
+            console.error('An error occurred loading the grass texture for scene background.', err);
+            // Fallback to a color if image fails
+            scene.background = new THREE.Color('#d6f5f0'); 
+        });
+
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 3, 8);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.outputEncoding = THREE.sRGBEncoding; 
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(10, 10, 5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.height = 2048;
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 50;
+        directionalLight.shadow.camera.left = -20;
+        directionalLight.shadow.camera.right = 20;
+        directionalLight.shadow.camera.top = 20;
+        directionalLight.shadow.camera.bottom = -20;
+        scene.add(directionalLight);
+
+        // ADDED: Ground plane with grass.jpeg texture
+        const groundSize = 50; // Match this to your intended playable area size
+        const grassTextureLoader = new THREE.TextureLoader();
+        grassTextureLoader.load('grass.jpeg', function(grassTexture) {
+            grassTexture.wrapS = THREE.RepeatWrapping;
+            grassTexture.wrapT = THREE.RepeatWrapping;
+            grassTexture.repeat.set(groundSize / 5, groundSize / 5); // Adjust tiling as needed
+            const groundGeometry = new THREE.PlaneGeometry(groundSize, groundSize);
+            const groundMaterial = new THREE.MeshLambertMaterial({ map: grassTexture });
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+        }, undefined, function(err) {
+            console.error('An error occurred loading the grass texture for the ground plane.', err);
+            // Fallback to a solid green color if image fails
+            const groundGeometry = new THREE.PlaneGeometry(groundSize, groundSize);
+            const groundMaterial = new THREE.MeshLambertMaterial({ color: 0x00FF00 }); // Green fallback
+            const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+        });
+
+
+        let model; // The player character (cat)
+        let dogModel; // The dog model
+        let isJumping = false;
+        let jumpVelocity = 0;
+        const jumpPower = 0.25;
+        const gravity = -0.012;
+        const moveSpeed = 0.08;
+        let keys = {};
+        
+        let score = 0; // Mice collected
+        let evadeScore = 0; // Time evaded from dog
+        let gameActive = false; // Game starts inactive
+        let animationFrameId; // To store the requestAnimationFrame ID
+
+        const dogSpeed = 0.05; // ADJUST THIS TO MAKE DOG FASTER/SLOWER
+        const playerCollisionRadius = 0.7; // Radius for player's collision detection
+        const dogCollisionRadius = 0.6; // Adjusted radius for dog's collision detection (smaller to make it more precise)
+        const objectCollisionRadius = 1.5; // Radius for other objects
+
+        // ADDED: Boundary limits for the player
+        const playAreaHalfSize = groundSize / 2 - playerCollisionRadius; // Keep player within bounds
+
+
+        const scoreElement = document.getElementById('currentScore');
+        const evadeScoreDisplay = document.getElementById('currentEvadeScore');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const restartButton = document.getElementById('restartButton');
+        const backToSiteButton = document.getElementById('backToSiteButton'); // New: Back to Site button
+        const finalEvadeScore = document.getElementById('finalEvadeScore');
+        const finalMiceScore = document.getElementById('finalMiceScore');
+        const gameOverText = document.getElementById('gameOverText'); // New: For dynamic text
+        const dangerOverlay = document.getElementById('dangerOverlay'); //
+
+        // New Cash Award Popup Elements
+        const cashAwardPopup = document.getElementById('cashAwardPopup');
+        const cashAwardMessage = document.getElementById('cashAwardMessage');
+
+        // New Audio Control Elements
+        const toggleMusicButton = document.getElementById('toggleMusicButton');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const backgroundMusic = new Audio('comedy.mp3');
+        backgroundMusic.loop = true; // Loop the music
+        backgroundMusic.volume = 0.5; // Default volume
+
+        let currentMouse = null; // Stores the currently spawned mouse
+        let miceCollectedCount = 0; // Tracks how many mice have been collected
+        const totalMiceToSpawn = 30; // Total number of mice that will appear in the game
+        const MIN_MICE_FOR_COIN_AWARD = 10; // New: Minimum mice to collect to get a coin
+
+        const loader = new THREE.GLTFLoader();
+        // const textureLoader = new THREE.TextureLoader(); // Already declared above for scene background
+
+        const playerModelPath = './models/scene.gltf'; // Your cat model
+        const playerTexturePath = './models/textures/Muchkin2_baseColor.png'; // Your cat texture
+        const mouseModelPath = './models/mouse.glb'; // Path to your mouse model
+
+        let otherCollisionObjects = []; // Array to store other objects for collision
+
+        // Audio elements
+        const winSound = new Audio('win.mp3');
+        const looseSound = new Audio('loose.mp3');
+        const kitzSound = new Audio('kitz.mp3');
+
+        // --- Function to load GLB models ---
+        function loadGLBModel(path, scale, position, rotation = new THREE.Vector3(0, 0, 0), onLoaded = null, name = '') {
+            loader.load(
+                path,
+                function (gltf) {
+                    const loadedModel = gltf.scene;
+                    loadedModel.scale.set(scale.x, scale.y, scale.z);
+                    loadedModel.position.set(position.x, position.y, position.z);
+                    loadedModel.rotation.set(rotation.x, rotation.y, rotation.z);
+                    loadedModel.name = name; // Assign a name to the model
+
+                    loadedModel.traverse((node) => {
+                        if (node.isMesh) {
+                            node.castShadow = true;
+                            node.receiveShadow = true;
+                            if (node.material && node.material.isMeshStandardMaterial) {
+                                // Already good
+                            } else if (node.material) {
+                                node.material = new THREE.MeshStandardMaterial().copy(node.material);
+                                node.material.map = node.material.map;
+                                node.material.needsUpdate = true;
+                            }
+                        }
+                    });
+                    scene.add(loadedModel);
+                    if (onLoaded) {
+                        onLoaded(loadedModel);
+                    }
+                },
+                function (xhr) {
+                    // console.log((xhr.loaded / xhr.total * 100) + '% loaded: ' + path);
+                },
+                function (error) {
+                    console.error('An error occurred loading model: ' + path, error);
+                }
+            );
+        }
+
+        // --- Function to create a placeholder mouse ---
+        function createPlaceholderMouse(position, rotation = new THREE.Vector3(0, 0, 0)) {
+            const mouseGroup = new THREE.Group();
+
+            // Body (elongated sphere)
+            const bodyGeometry = new THREE.SphereGeometry(0.3, 16, 16);
+            bodyGeometry.applyMatrix4(new THREE.Matrix4().makeScale(1.5, 1, 1)); // Make it elongated
+            const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 50 });
+            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
+            body.castShadow = true;
+            body.receiveShadow = true;
+            mouseGroup.add(body);
+
+            // Head (smaller sphere)
+            const headGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+            const headMaterial = new THREE.MeshPhongMaterial({ color: 0xcccccc, shininess: 50 });
+            const head = new THREE.Mesh(headGeometry, headMaterial);
+            head.position.z = 0.4; // Position in front of the body
+            head.castShadow = true;
+            head.receiveShadow = true;
+            mouseGroup.add(head);
+
+            // Ears (flat circles)
+            const earGeometry = new THREE.CircleGeometry(0.15, 16);
+            const earMaterial = new THREE.MeshPhongMaterial({ color: 0xbbbbbb, side: THREE.DoubleSide, shininess: 50 });
+
+            const leftEar = new THREE.Mesh(earGeometry, earMaterial);
+            leftEar.position.set(-0.2, 0.2, 0.35);
+            leftEar.rotation.y = -Math.PI / 4;
+            leftEar.castShadow = true;
+            leftEar.receiveShadow = true;
+            mouseGroup.add(leftEar);
+
+            const rightEar = new THREE.Mesh(earGeometry, earMaterial);
+            rightEar.position.set(0.2, 0.2, 0.35);
+            rightEar.rotation.y = Math.PI / 4;
+            rightEar.castShadow = true;
+            rightEar.receiveShadow = true;
+            mouseGroup.add(rightEar);
+
+            // Nose
+            const noseGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+            const noseMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            const nose = new THREE.Mesh(noseGeometry, noseMaterial);
+            nose.position.set(0, 0, 0.55);
+            nose.castShadow = true;
+            nose.receiveShadow = true;
+            mouseGroup.add(nose);
+
+            // Tail (cylinder or line, using cylinder for simplicity)
+            const tailGeometry = new THREE.CylinderGeometry(0.03, 0.03, 0.8, 8);
+            const tailMaterial = new THREE.MeshPhongMaterial({ color: 0x999999 });
+            const tail = new THREE.Mesh(tailGeometry, tailMaterial);
+            tail.rotation.x = Math.PI / 2; // Orient horizontally
+            tail.position.set(0, 0, -0.6); // Position behind the body
+            tail.castShadow = true;
+            tail.receiveShadow = true;
+            mouseGroup.add(tail);
+
+            mouseGroup.position.copy(position);
+            mouseGroup.rotation.set(rotation.x, rotation.y, rotation.z);
+
+            return mouseGroup;
+        }
+
+
+        // --- Load Player Model (Cat) ---
+        loader.load(
+            playerModelPath,
+            function (gltf) {
+                model = gltf.scene;
+                
+                model.scale.set(1.5, 1.5, 1.5); 
+                model.position.set(0, 0, 0); 
+
+                textureLoader.load(playerTexturePath, function (texture) {
+                    texture.encoding = THREE.sRGBEncoding; 
+                    texture.flipY = false; 
+
+                    model.traverse((node) => {
+                        if (node.isMesh) {
+                            node.castShadow = true;
+                            node.receiveShadow = true;
+
+                            if (node.material) {
+                                if (Array.isArray(node.material)) {
+                                    node.material.forEach(material => {
+                                        if (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial || material.isMeshLambertMaterial || material.isMeshPhongMaterial) {
+                                            material.map = texture;
+                                            material.needsUpdate = true;
+                                        }
+                                    });
+                                } else {
+                                    if (node.material.isMeshStandardMaterial || node.material.isMeshPhysicalMaterial || node.material.isMeshLambertMaterial || node.material.isMeshPhongMaterial) {
+                                        node.material.map = texture;
+                                        node.needsUpdate = true;
+                                    }
+                                }
+                            }
+                        }
+                    });
+
+                    scene.add(model);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'none'; 
+                    // Do NOT spawn mouse here, will be spawned on game start
+                }, undefined, function (error) {
+                    console.error('An error occurred loading the player texture:', error);
+                    scene.add(model); // Still add model even if texture fails
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('error').style.display = 'none'; 
+                    // Do NOT spawn mouse here, will be spawned on game start
+                });
+
+            },
+            function (xhr) {
+                console.log((xhr.loaded / xhr.total * 100) + '% loaded (Player Model)');
+            },
+            function (error) {
+                console.error('An error occurred while loading the player GLTF model:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                createPlaceholderAnimal(); 
+                // Do NOT spawn mouse here, will be spawned on game start
+            }
+        );
+
+        function createPlaceholderAnimal() {
+            const geometry = new THREE.BoxGeometry(1, 1, 1.5);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: '#ff6b9d',
+                shininess: 100
+            });
+            model = new THREE.Mesh(geometry, material);
+            model.position.set(0, 0.5, 0);
+            model.castShadow = true;
+            model.receiveShadow = true;
+
+            const eyeGeometry = new THREE.SphereGeometry(0.1, 8, 8);
+            const eyeMaterial = new THREE.MeshPhongMaterial({ color: 0x000000 });
+            
+            const leftEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            leftEye.position.set(-0.2, 0.2, 0.6);
+            model.add(leftEye);
+            
+            const rightEye = new THREE.Mesh(eyeGeometry, eyeMaterial);
+            rightEye.position.set(0.2, 0.2, 0.6);
+            model.add(rightEye);
+
+            const noseGeometry = new THREE.SphereGeometry(0.05, 6, 6);
+            const noseMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
+            const nose = new THREE.Mesh(noseGeometry, noseMaterial);
+            nose.position.set(0, 0, 0.75);
+            model.add(nose);
+
+            scene.add(model);
+        }
+
+        // --- Load other GLB models ---
+        const otherModels = [
+            { path: './models/desktop_design_cute.glb', scale: new THREE.Vector3(2, 2, 2), position: new THREE.Vector3(5, 0, 5), rotation: new THREE.Vector3(0, Math.PI / 4, 0) },
+            { path: './models/rat_plushy.glb', scale: new THREE.Vector3(0.5, 0.5, 0.5), position: new THREE.Vector3(3, 0, -7) },
+            { path: './models/slide_playground.glb', scale: new THREE.Vector3(2, 2, 2), position: new THREE.Vector3(5, 0, 0), rotation: new THREE.Vector3(0, Math.PI / 2, 0), walkable: true },
+            { path: './models/pink_house.glb', scale: new THREE.Vector3(2, 2, 2), position: new THREE.Vector3(-15, 0, 10), rotation: new THREE.Vector3(0, Math.PI / 4, 0) },
+            { path: './models/paper_box.glb', scale: new THREE.Vector3(1, 1, 1), position: new THREE.Vector3(8, 0, -8), rotation: new THREE.Vector3(0, Math.PI / 8, 0) },
+            { path: './models/japanese_cherry_tree_low-poly.glb', scale: new THREE.Vector3(4, 4, 4), position: new THREE.Vector3(20, 0, -5), rotation: new THREE.Vector3(0, 0, 0) }
+        ];
+
+        otherModels.forEach(m => {
+            loadGLBModel(m.path, m.scale, m.position, m.rotation, (loadedObject) => {
+                if (m.path !== './models/pink_house.glb' && !m.isGround) { 
+                    otherCollisionObjects.push({ model: loadedObject, radius: objectCollisionRadius, walkable: m.walkable || false });
+                }
+            });
+        });
+
+        // Load the Dog Model separately to control it
+        loadGLBModel(
+            './models/dog.glb', 
+            new THREE.Vector3(0.5, 0.5, 0.5), // Made the dog smaller
+            new THREE.Vector3(-8, 0, 2),    // Initial position for the dog (Y is 0, so it rests on the ground)
+            new THREE.Vector3(0, -Math.PI / 4, 0),
+            (loadedDog) => {
+                dogModel = loadedDog;
+            },
+            'enemyDog' // Give the dog a unique name
+        );
+
+        // --- Function to spawn the next mouse ---
+        function spawnNextMouse() {
+            if (miceCollectedCount < totalMiceToSpawn) {
+                // Use playAreaHalfSize to ensure mice spawn within the bounds
+                const randomX = (Math.random() * 2 - 1) * (playAreaHalfSize - 2); // -2 to ensure some margin
+                const randomZ = (Math.random() * 2 - 1) * (playAreaHalfSize - 2); 
+                const mouseYOffset = 0.3; // Height above ground for the mouse
+
+                const mousePosition = new THREE.Vector3(randomX, mouseYOffset, randomZ);
+
+                loader.load(mouseModelPath,
+                    function (gltf) {
+                        const loadedMouse = gltf.scene;
+                        loadedMouse.scale.set(1.5, 1.5, 1.5); // Scală mărită pentru șoareci (poți ajusta valoarea)
+                        loadedMouse.position.copy(mousePosition);
+                        loadedMouse.name = `collectibleMouse_${miceCollectedCount}`;
+                        loadedMouse.traverse((node) => {
+                            if (node.isMesh) {
+                                node.castShadow = true;
+                                node.receiveShadow = true;
+                            }
+                        });
+                        scene.add(loadedMouse);
+                        currentMouse = loadedMouse; // Assign the newly spawned mouse to currentMouse
+                        console.log(`Spawned GLB mouse #${miceCollectedCount} at (${mousePosition.x.toFixed(1)}, ${mousePosition.z.toFixed(1)})`); // ADDED: Log for GLB mouse spawn
+                    },
+                    undefined,
+                    function (error) {
+                        console.warn('Failed to load mouse.glb, creating placeholder mouse instead:', error);
+                        const placeholderMouse = createPlaceholderMouse(mousePosition);
+                        placeholderMouse.name = `collectibleMouse_placeholder_${miceCollectedCount}`;
+                        scene.add(placeholderMouse);
+                        currentMouse = placeholderMouse; // Assign the placeholder mouse to currentMouse
+                        console.log(`Spawned placeholder mouse #${miceCollectedCount} at (${mousePosition.x.toFixed(1)}, ${mousePosition.z.toFixed(1)})`); // ADDED: Log for placeholder mouse spawn
+                    }
+                );
+            } else {
+                console.log("All mice have been spawned!");
+                gameWin(); // Call gameWin when all mice are collected
+            }
+        }
+
+        // Simple orbit controls
+        let mouseX = 0, mouseY = 0;
+        let cameraAngle = 0;
+        let cameraHeight = 3;
+        const cameraDistance = 8;
+
+        document.addEventListener('mousemove', (event) => {
+            if (!gameActive) return;
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            cameraAngle = mouseX * Math.PI;
+            cameraHeight = 3 + mouseY * 2;
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', (event) => {
+            if (!gameActive) return;
+            keys[event.key.toLowerCase()] = true;
+            if (event.key === ' ' && !isJumping && model) {
+                isJumping = true;
+                jumpVelocity = jumpPower;
+                event.preventDefault();
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            if (!gameActive) return;
+            keys[event.key.toLowerCase()] = false;
+        });
+
+        // Restart game functionality
+        restartButton.addEventListener('click', () => {
+            location.reload(); // Simple reload for now
+        });
+
+        // New: Back to Site functionality
+        backToSiteButton.addEventListener('click', () => {
+            // Hide the game container and navigate back to the main site:
+            window.location.href = 'pets.html'; // Assuming pets.html is your main site
+        });
+
+        function updateMovement() {
+            if (!model || !gameActive) return;
+
+            const previousPosition = model.position.clone();
+            let moved = false;
+            const moveVector = new THREE.Vector3(0, 0, 0);
+
+            const cameraDirection = new THREE.Vector3();
+            camera.getWorldDirection(cameraDirection);
+            cameraDirection.y = 0; 
+            cameraDirection.normalize();
+
+            const cameraRight = new THREE.Vector3().crossVectors(cameraDirection, new THREE.Vector3(0, 1, 0)).normalize();
+
+            if (keys['w']) {
+                moveVector.add(cameraDirection.multiplyScalar(moveSpeed));
+                moved = true;
+            }
+            if (keys['s']) {
+                moveVector.sub(cameraDirection.multiplyScalar(moveSpeed));
+                moved = true;
+            }
+            if (keys['a']) {
+                moveVector.sub(cameraRight.multiplyScalar(moveSpeed));
+                moved = true;
+            }
+            if (keys['d']) {
+                moveVector.add(cameraRight.multiplyScalar(moveSpeed));
+                moved = true;
+            }
+
+            if (moved) {
+                model.position.add(moveVector);
+                
+                let onWalkableObject = false;
+                for (let i = 0; i < otherCollisionObjects.length; i++) {
+                    const obj = otherCollisionObjects[i];
+                    // IMPORTANT: Adjust objEffectivePosition based on the actual geometry of the loaded GLB models.
+                    // For a simple box, obj.model.scale.y / 2 might be a good center. For complex models,
+                    // you might need to determine their true base Y-coordinate.
+                    const objEffectivePosition = new THREE.Vector3(obj.model.position.x, obj.model.position.y + obj.radius / 2, obj.model.position.z);
+                    const distance = model.position.distanceTo(objEffectivePosition);
+
+                    if (distance < (playerCollisionRadius + obj.radius)) {
+                        if (obj.walkable) {
+                            const currentModelHeight = model.position.y;
+                            // For walkable objects, aim to place the player slightly above their top surface.
+                            // This might need fine-tuning based on the specific walkable model's bounding box or desired interaction.
+                            const targetY = obj.model.position.y + obj.model.scale.y * 0.5 + 0.1; 
+                            
+                            if (currentModelHeight < targetY) {
+                                model.position.y = targetY;
+                                isJumping = false;
+                                jumpVelocity = 0;
+                                onWalkableObject = true;
+                            }
+                        } else {
+                            model.position.copy(previousPosition);
+                            break;
+                        }
+                    }
+                }
+
+                // If not on a walkable object and not jumping, apply ground logic
+                if (!onWalkableObject && !isJumping) {
+                    model.position.y = 0; 
+                }
+
+                if (moveVector.length() > 0) {
+                    const targetRotation = Math.atan2(-moveVector.x, -moveVector.z); 
+                    model.rotation.y = THREE.MathUtils.lerp(model.rotation.y, targetRotation, 0.1);
+                }
+
+                const time = Date.now() * 0.01;
+                // Apply subtle bobbing only if on main ground (y=0) and not jumping
+                if (!isJumping && model.position.y === 0) { 
+                    model.position.y = Math.max(0, Math.sin(time) * 0.1); 
+                }
+            } else if (!isJumping) {
+                let onWalkableObject = false;
+                for (let i = 0; i < otherCollisionObjects.length; i++) {
+                    const obj = otherCollisionObjects[i];
+                    const objEffectivePosition = new THREE.Vector3(obj.model.position.x, obj.model.position.y + obj.radius / 2, obj.model.position.z);
+                    const distance = model.position.distanceTo(objEffectivePosition);
+                    if (distance < (playerCollisionRadius + obj.radius) && obj.walkable) {
+                        const targetY = obj.model.position.y + obj.model.scale.y * 0.5 + 0.1;
+                        if (model.position.y < targetY) {
+                            model.position.y = targetY;
+                            onWalkableObject = true;
+                            break;
+                        }
+                    }
+                }
+                if (!onWalkableObject) {
+                    model.position.y = 0; 
+                }
+            }
+
+            // ADDED: Boundary enforcement for the player
+            model.position.x = Math.max(-playAreaHalfSize, Math.min(playAreaHalfSize, model.position.x));
+            model.position.z = Math.max(-playAreaHalfSize, Math.min(playAreaHalfSize, model.position.z));
+
+
+            if (isJumping) {
+                model.position.y += jumpVelocity;
+                jumpVelocity += gravity;
+
+                let landedOnObject = false;
+                if (jumpVelocity < 0) { 
+                    for (let i = 0; i < otherCollisionObjects.length; i++) {
+                        const obj = otherCollisionObjects[i];
+                        if (obj.walkable) {
+                            // To correctly calculate the top surface, you might need to get the bounding box of the loaded model.
+                            // For simplicity, using model.position.y + scale.y for now.
+                            const objMaxY = obj.model.position.y + obj.model.scale.y; 
+
+                            const dx = Math.abs(model.position.x - obj.model.position.x);
+                            const dz = Math.abs(model.position.z - obj.model.position.z);
+                            const combinedRadius = playerCollisionRadius + obj.radius; // This `obj.radius` might not be ideal for all shapes
+
+                            if (dx < combinedRadius && dz < combinedRadius) { 
+                                if (model.position.y <= objMaxY && previousPosition.y > objMaxY) { 
+                                    model.position.y = objMaxY + 0.1; 
+                                    isJumping = false;
+                                    jumpVelocity = 0;
+                                    landedOnObject = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (landedOnObject) {
+                        model.position.y = Math.max(model.position.y, 0); 
+                    }
+                }
+
+                if (model.position.y <= 0 && !landedOnObject) { 
+                    model.position.y = 0;
+                    isJumping = false;
+                    jumpVelocity = 0;
+                }
+            }
+        }
+
+        function updateDogMovement() {
+            if (!dogModel || !model || !gameActive) return;
+
+            const distanceToPlayer = dogModel.position.distanceTo(model.position);
+
+            if (distanceToPlayer > 1.0) { // Dog only moves if it's far enough
+                const direction = new THREE.Vector3().subVectors(model.position, dogModel.position).normalize();
+                dogModel.position.x += direction.x * dogSpeed;
+                dogModel.position.z += direction.z * dogSpeed;
+                
+                // Make dog face the player
+                const targetRotation = Math.atan2(direction.x, direction.z);
+                dogModel.rotation.y = THREE.MathUtils.lerp(dogModel.rotation.y, targetRotation, 0.05);
+
+                // Ensure dog stays on the ground, accounting for its model's pivot
+                dogModel.position.y = 0; 
+            }
+
+            // ADDED: Boundary enforcement for the dog
+            dogModel.position.x = Math.max(-playAreaHalfSize, Math.min(playAreaHalfSize, dogModel.position.x));
+            dogModel.position.z = Math.max(-playAreaHalfSize, Math.min(playAreaHalfSize, dogModel.position.z));
+        }
+
+        function checkCollisions() {
+            if (!model || !gameActive) return;
+
+            const playerPosition = model.position;
+            
+            // Collision with current mouse
+            if (currentMouse && currentMouse.parent) { 
+                const mouseHeightOffset = 0.2; 
+                const effectiveMousePosition = new THREE.Vector3(currentMouse.position.x, currentMouse.position.y + mouseHeightOffset, currentMouse.position.z);
+                
+                const mouseCollectionRadius = 0.5; 
+
+                if (playerPosition.distanceTo(effectiveMousePosition) < (playerCollisionRadius + mouseCollectionRadius)) {
+                    scene.remove(currentMouse); 
+                    currentMouse = null; // Clear the current mouse
+                    score++;
+                    miceCollectedCount++; // Increment the count of collected mice
+                    scoreElement.textContent = score;
+                    kitzSound.play(); // Play kitz sound
+                    console.log("Collected a mouse! Score: " + score);
+                    spawnNextMouse(); // Spawn the next mouse
+                }
+            }
+
+            // Collision with dog
+            if (dogModel && dogModel.parent) {
+                // Determine the effective center of the dog for collision.
+                const effectiveDogPosition = new THREE.Vector3(dogModel.position.x, dogModel.position.y + 0.3, dogModel.position.z); 
+                
+                const distance = playerPosition.distanceTo(effectiveDogPosition);
+                // console.log("Distance to dog: " + distance.toFixed(2)); // For debugging, uncomment to see distance
+
+                if (distance < (playerCollisionRadius + dogCollisionRadius)) {
+                    gameOver();
+                }
+            }
+        }
+
+        function updateCollectibleMice() {
+            if (!gameActive) return;
+            if (currentMouse && currentMouse.parent) {
+                currentMouse.rotation.y += 0.05; 
+            }
+        }
+
+        function updateEvadeScore() {
+            if (gameActive) {
+                evadeScore += 1 / 60; // Assuming 60 FPS, adds 1 point per second
+                evadeScoreDisplay.textContent = Math.floor(evadeScore);
+            }
+        }
+
+        function setCatColor(color) {
+            if (model) {
+                model.traverse((node) => {
+                    if (node.isMesh) {
+                        if (Array.isArray(node.material)) {
+                            node.material.forEach(material => {
+                                if (material.isMeshStandardMaterial || material.isMeshPhysicalMaterial || material.isMeshLambertMaterial || material.isMeshPhongMaterial) {
+                                    material.color.set(color);
+                                    material.needsUpdate = true;
+                                }
+                            });
+                        } else {
+                            if (node.material.isMeshStandardMaterial || node.material.isMeshPhysicalMaterial || node.material.isMeshLambertMaterial || node.material.isMeshPhongMaterial) {
+                                node.material.color.set(color);
+                                node.needsUpdate = true;
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Function to show the cash award popup
+        function showCashAwardPopup(coins) {
+            cashAwardMessage.textContent = `You won ${coins} in cash! 💸`;
+            cashAwardPopup.style.display = 'block';
+            // Hide the popup after 3 seconds
+            setTimeout(() => {
+                cashAwardPopup.style.display = 'none';
+            }, 3000);
+        }
+
+        function gameOver() {
+            gameActive = false;
+            cancelAnimationFrame(animationFrameId); // Stop the animation loop
+            
+            setCatColor(0xff0000); // Set cat to red
+            looseSound.play(); // Play loose sound
+            backgroundMusic.pause(); // Pause background music on game over
+
+            // Calculate and save coins earned
+            let coinsEarned = 0;
+            if (score >= MIN_MICE_FOR_COIN_AWARD) {
+                coinsEarned = Math.floor(score / MIN_MICE_FOR_COIN_AWARD);
+                localStorage.setItem('gameCoinsEarned', coinsEarned);
+                console.log(`Awarding ${coinsEarned} coin(s) for collecting ${score} mice!`);
+            } else {
+                localStorage.setItem('gameCoinsEarned', 0); // No coins earned
+            }
+            
+            // Display game over screen
+            gameOverText.textContent = "GAME OVER!";
+            gameOverScreen.style.display = 'flex';
+            finalEvadeScore.textContent = Math.floor(evadeScore);
+            finalMiceScore.textContent = score;
+            
+            console.log("GAME OVER! Dog caught you!");
+
+            // Show cash award popup if coins were earned
+            if (coinsEarned > 0) {
+                showCashAwardPopup(coinsEarned);
+            }
+        }
+
+        function gameWin() {
+            gameActive = false;
+            cancelAnimationFrame(animationFrameId); // Stop the animation loop
+
+            setCatColor(0x00ff00); // Set cat to green for winning
+            winSound.play(); // Play win sound
+            backgroundMusic.pause(); // Pause background music on game win
+
+            // Calculate and save coins earned
+            let coinsEarned = 0;
+            if (score >= MIN_MICE_FOR_COIN_AWARD) {
+                coinsEarned = Math.floor(score / MIN_MICE_FOR_COIN_AWARD); // Calculate coins based on collected mice
+                localStorage.setItem('gameCoinsEarned', coinsEarned); // Save coins to localStorage
+                console.log(`Player collected ${score} mice, awarding ${coinsEarned} coin(s)!`);
+            } else {
+                localStorage.setItem('gameCoinsEarned', 0); // No coins earned
+                console.log("Player collected " + score + " mice, not enough for a coin.");
+            }
+
+            // Display win screen (reusing gameOverScreen)
+            gameOverText.textContent = "YOU WIN!";
+            gameOverScreen.style.display = 'flex';
+            finalEvadeScore.textContent = Math.floor(evadeScore);
+            finalMiceScore.textContent = score;
+            console.log("YOU WIN! All mice collected!");
+
+            // Show cash award popup if coins were earned
+            if (coinsEarned > 0) {
+                showCashAwardPopup(coinsEarned);
+            }
+        }
+
+        function updateDangerOverlay() {
+            if (!model || !dogModel || !gameActive) {
+                dangerOverlay.style.display = 'none';
+                dangerOverlay.style.backgroundColor = 'rgba(255, 0, 0, 0)'; // Ensure fully transparent
+                return;
+            }
+
+            const distance = model.position.distanceTo(dogModel.position);
+            const dangerThreshold = 10; // Distance at which danger effect starts
+            const maxDangerDistance = 2; // Distance at which danger effect is at max
+
+            if (distance < dangerThreshold) {
+                dangerOverlay.style.display = 'block';
+
+                // Calculate intensity based on distance (closer = more intense)
+                let intensity = 1 - ((distance - playerCollisionRadius - dogCollisionRadius) / (dangerThreshold - maxDangerDistance));
+                intensity = Math.max(0, Math.min(1, intensity)); // Clamp between 0 and 1
+
+                // Simulate heartbeat pulse
+                const pulseSpeed = 5; // Adjust for faster/slower pulse
+                const pulseValue = (Math.sin(Date.now() * 0.01 * pulseSpeed) + 1) / 2; // Value between 0 and 1
+
+                // Base opacity increases as intensity increases
+                const baseOpacity = 0.1 * intensity; 
+                // Pulse amplitude increases with intensity
+                const pulseAmplitude = 0.2 * intensity; 
+
+                let opacity = baseOpacity + pulseValue * pulseAmplitude;
+                opacity = Math.min(opacity, 0.6); // Cap max opacity for visibility
+
+                dangerOverlay.style.backgroundColor = `rgba(255, 0, 0, ${opacity})`;
+            } else {
+                dangerOverlay.style.display = 'none';
+                dangerOverlay.style.backgroundColor = 'rgba(255, 0, 0, 0)';
+            }
+        }
+
+
+        function updateCamera() {
+            if (model) { // Camera should still follow even if game is over or not started
+                const relativeCameraPos = new THREE.Vector3(
+                    Math.sin(cameraAngle) * cameraDistance,
+                    cameraHeight,
+                    Math.cos(cameraAngle) * cameraDistance
+                );
+
+                const targetCameraPosition = new THREE.Vector3().addVectors(model.position, relativeCameraPos);
+                camera.position.lerp(targetCameraPosition, 0.05);
+                camera.lookAt(model.position.x, model.position.y + 0.5, model.position.z);
+            }
+        }
+
+        function animate() {
+            animationFrameId = requestAnimationFrame(animate);
+            
+            if (gameActive) {
+                updateMovement();
+                updateDogMovement(); // Update dog's position to chase player
+                checkCollisions(); 
+                updateCollectibleMice(); 
+                updateEvadeScore(); // Update evade score
+                updateDangerOverlay(); 
+            }
+            updateCamera(); 
+
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const animalName = urlParams.get('name') || 'Your Buddy';
+        const animalImage = urlParams.get('img');
+
+        const buddyNameSpan = document.getElementById('buddyName');
+        const buddyImgElem = document.getElementById('buddyImg');
+
+        buddyNameSpan.textContent = animalName;
+        document.title = `Play with ${animalName}`;
+
+        if (animalImage) {
+            buddyImgElem.src = animalImage;
+            buddyImgElem.style.display = 'block';
+        }
+
+        // --- Start Screen Logic ---
+        const startScreen = document.getElementById('startScreen');
+        const startGameButton = document.getElementById('startGameButton');
+        const infoElement = document.getElementById('info');
+        const instructionsElement = document.getElementById('instructions');
+        const scoreElementDisplay = document.getElementById('score');
+        const evadeScoreDisplayElement = document.getElementById('evadeScoreDisplay');
+        const audioControls = document.getElementById('audioControls'); // Get the audio controls div
+
+        startGameButton.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            infoElement.style.display = 'flex'; // Show info
+            instructionsElement.style.display = 'block'; // Show instructions
+            scoreElementDisplay.style.display = 'block'; // Show score
+            evadeScoreDisplayElement.style.display = 'block'; // Show evade score
+            audioControls.style.display = 'flex'; // Show audio controls
+            gameActive = true; // Set game to active
+            score = 0; // Reset score for a new game
+            miceCollectedCount = 0; // Reset mice collected count
+            evadeScore = 0; // Reset evade score
+            scoreElement.textContent = score; // Update score display
+            evadeScoreDisplay.textContent = Math.floor(evadeScore); // Update evade score display
+            if (currentMouse) { // Remove any existing mouse from previous rounds
+                scene.remove(currentMouse);
+                currentMouse = null;
+            }
+            spawnNextMouse(); // Spawn the first mouse when the game starts
+            animate(); // Start the game loop
+            backgroundMusic.play().catch(e => console.error("Error playing music:", e)); // Start background music
+        });
+
+        // Audio Control Event Listeners
+        toggleMusicButton.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play().catch(e => console.error("Error playing music:", e));
+                toggleMusicButton.textContent = 'Mute Music';
+            } else {
+                backgroundMusic.pause();
+                toggleMusicButton.textContent = 'Play Music';
+            }
+        });
+
+        volumeSlider.addEventListener('input', () => {
+            backgroundMusic.volume = volumeSlider.value;
+            // If music was muted and volume is raised, unmute it
+            if (backgroundMusic.paused && volumeSlider.value > 0) {
+                backgroundMusic.play().catch(e => console.error("Error playing music:", e));
+                toggleMusicButton.textContent = 'Mute Music';
+            } else if (!backgroundMusic.paused && volumeSlider.value == 0) {
+                backgroundMusic.pause(); // Pause if volume is 0
+                toggleMusicButton.textContent = 'Play Music';
+            }
+        });
+
+
+        // Initialize display states (all game UI hidden until start)
+        document.addEventListener('DOMContentLoaded', () => {
+            infoElement.style.display = 'none';
+            instructionsElement.style.display = 'none';
+            scoreElementDisplay.style.display = 'none';
+            evadeScoreDisplayElement.style.display = 'none';
+            audioControls.style.display = 'none'; // Hide audio controls initially
+            // Loading screen will show initially, then start screen, then game UI
+        });
+    </script>
+</body>
+</html>

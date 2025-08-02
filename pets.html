@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adopt & Learn</title>
+  <link rel="icon" href="https://i.ibb.co/Q8Q9Y0D/paw-print.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Quicksand', sans-serif;
+      background: linear-gradient(to bottom, #fdebf2, #fae0e6); /* Softer, more inviting gradient */
+      color: #333;
+      overflow-x: hidden;
+    }
+    header {
+      background: #ff769e; /* Slightly deeper pink */
+      padding: 2.5rem;
+      text-align: center;
+      color: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15); /* More pronounced shadow */
+      position: relative; /* For the waving animation */
+      overflow: hidden; /* To contain the wave */
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      width: 100%;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      animation: wave 3s infinite alternate;
+    }
+    @keyframes wave {
+      0% { transform: translateX(-50%) scaleY(0.5); }
+      100% { transform: translateX(50%) scaleY(1); }
+    }
+    h1 {
+      margin: 0;
+      font-size: 3rem; /* Larger title */
+      font-weight: 700;
+    }
+    header p {
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+      opacity: 0.9;
+    }
+    main {
+      padding: 2rem;
+      max-width: 960px; /* Slightly wider main content */
+      margin: auto;
+    }
+    .intro {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      font-size: 1.3rem; /* Larger intro text */
+      line-height: 1.6;
+      color: #555;
+    }
+    .timer-section {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative; /* For coins display */
+    }
+    .virtual-coins-display {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #FFD700; /* Gold color */
+        color: #333;
+        padding: 8px 15px;
+        border-radius: 25px;
+        font-weight: bold;
+        font-size: 1.1em;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        display: flex;
+        align-items: center;
+    }
+    .virtual-coins-display img {
+        width: 25px;
+        height: 25px;
+        margin-right: 8px;
+    }
+
+    .timer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1.5rem 0;
+    }
+    .timer span {
+      font-size: 3rem; /* Larger timer font */
+      font-weight: 700;
+      color: #2a2a2a;
+      background: #f0f0f0;
+      padding: 0.5rem 1.5rem;
+      border-radius: 10px;
+      min-width: 180px;
+      text-align: center;
+    }
+    .timer button {
+      background: #6a0572; /* Deep purple for call to action */
+      border: none;
+      color: white;
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      margin-left: 2rem;
+      transition: background 0.3s ease, transform 0.1s ease;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .timer button:hover {
+      background: #9d00b1; /* Lighter purple on hover */
+      transform: translateY(-2px);
+    }
+    .timer button:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .timer button:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .adopt-button {
+      background: #ff769e; /* Pink for adoption button */
+      margin-top: 1.5rem;
+    }
+    .adopt-button:hover {
+      background: #ff5e8c;
+    }
+    .reset-button { /* New style for the reset button */
+        background: #f44336; /* Red for reset button */
+        margin-top: 1.5rem;
+    }
+    .reset-button:hover {
+        background: #d32f2f;
+    }
+
+
+    .adopted {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Larger cards */
+      gap: 2rem; /* More space between cards */
+      margin-top: 2rem;
+    }
+    .animal {
+      background: #fff;
+      border-radius: 20px; /* More rounded corners */
+      padding: 1.5rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1); /* Deeper shadow */
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      position: relative; /* For the message button */
+    }
+    .animal:hover {
+      transform: translateY(-5px); /* Lift effect on hover */
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    }
+    .animal img {
+      width: 150px; /* Larger images */
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 1rem;
+      border: 4px solid #ff769e; /* Pink border around image */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .animal h3 {
+      margin: 0.5rem 0;
+      font-size: 1.5rem; /* Larger animal name */
+      color: #333;
+    }
+    .animal p {
+      font-size: 1rem; /* Slightly larger description */
+      color: #666;
+      flex-grow: 1; /* Allows description to take available space */
+    }
+    .animal .adopted-status {
+      font-size: 0.9rem;
+      color: #888;
+      margin-top: 1rem;
+      font-style: italic;
+    }
+    .animal .game-button, .animal .message-button { /* Style for the new game button and message button */
+        background: #00bcd4; /* A nice blue for interaction */
+        color: white;
+        border: none;
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background 0.3s ease;
+        text-decoration: none; /* Remove underline for links */
+        display: inline-block; /* Allow padding and margin */
+        width: calc(100% - 2.4rem); /* Adjust width to fit padding */
+        text-align: center;
+    }
+    .animal .game-button:hover, .animal .message-button:hover {
+        background: #0097a7;
+    }
+    .animal .message-button {
+        background: #ff9800; /* Orange for message button */
+        margin-top: 0.5rem;
+    }
+    .animal .message-button:hover {
+        background: #fb8c00;
+    }
+
+    .animal-items {
+        margin-top: 1rem;
+        border-top: 1px dashed #eee;
+        padding-top: 1rem;
+        text-align: left;
+        width: 100%;
+    }
+    .animal-items strong {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #555;
+    }
+    .animal-items ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+    }
+    .animal-items li {
+        background: #f0f0f0;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 0.85em;
+        color: #444;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .animal-items li .item-emoji { /* Style for emoji in item list */
+        font-size: 1.2em; /* Slightly larger emoji */
+        line-height: 1;
+        margin-right: 3px;
+    }
+    .animal-items li .item-image { /* Style for images in item list */
+        width: 25px; /* Adjust size as needed */
+        height: 25px;
+        vertical-align: middle;
+        margin-right: 3px;
+    }
+
+
+    /* Modal for animal adoption */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 10; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%;
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      max-width: 800px;
+      width: 90%;
+      text-align: center;
+      position: relative;
+    }
+    .close-button {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      position: absolute;
+      top: 15px;
+      right: 25px;
+    }
+    .close-button:hover,
+    .close-button:focus {
+      color: #333;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .modal-animals {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .modal-animal-card {
+      background: #f8f8f8;
+      border-radius: 12px;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border: 2px solid transparent;
+    }
+    .modal-animal-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .modal-animal-card.selected {
+      border: 2px solid #6a0572; /* Highlight selected animal */
+      background: #e6f7ff;
+    }
+    .modal-animal-card img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 0.5rem;
+      border: 2px solid #ff769e;
+    }
+    .modal-animal-card h4 {
+      margin: 0.2rem 0;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .modal-animal-card p {
+      font-size: 0.85rem;
+      color: #666;
+    }
+    .modal-adopt-btn {
+      background: #6a0572;
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: background 0.3s;
+    }
+    .modal-adopt-btn:hover {
+      background: #9d00b1;
+    }
+    .modal-adopt-btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+    }
+
+
+    .chatbot {
+      position: fixed;
+      bottom: 25px; /* Slightly higher */
+      right: 25px; /* Slightly wider */
+      background: white;
+      border-radius: 15px; /* More rounded */
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15); /* Deeper shadow */
+      padding: 1.5rem; /* More padding */
+      width: 320px; /* Slightly wider */
+      font-size: 1rem;
+      z-index: 5; /* Ensure it's above background animals */
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Smooth transition */
+    }
+
+    .chatbot.minimized {
+        transform: translateY(calc(100% - 60px)); /* Adjust 60px to show only header/button */
+        opacity: 0.8;
+        height: auto;
+        overflow: hidden;
+    }
+
+    .chatbot strong {
+      display: block;
+      margin-bottom: 0.8rem;
+      font-size: 1.1rem;
+      color: #6a0572; /* Max's name in purple */
+    }
+    .conversation-history { /* New style for chat history */
+      max-height: 250px; /* Limit height */
+      overflow-y: auto; /* Enable scrolling */
+      margin-bottom: 1rem;
+      padding-right: 5px; /* Space for scrollbar */
+    }
+    .message {
+        margin-bottom: 0.8rem;
+        padding: 0.6rem 0.9rem;
+        border-radius: 12px;
+        line-height: 1.4;
+        max-width: 85%; /* Limit message width */
+    }
+    .message.user {
+        background-color: #e0f7fa; /* Light blue for user messages */
+        margin-left: auto; /* Align user messages to the right */
+        text-align: right;
+        border-bottom-right-radius: 3px;
+    }
+    .message.bot {
+        background-color: #f0f0f0; /* Light gray for bot messages */
+        margin-right: auto; /* Align bot messages to the left */
+        text-align: left;
+        border-bottom-left-radius: 3px;
+    }
+    .chatbot input {
+      width: calc(100% - 1.2rem); /* Account for padding */
+      padding: 0.6rem;
+      margin-top: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+    .chatbot input:focus {
+      outline: none;
+      border-color: #ff769e; /* Highlight on focus */
+    }
+
+    /* Styles for the minimize button */
+    .chatbot-minimize-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #6a0572;
+        cursor: pointer;
+        padding: 5px;
+        line-height: 1;
+        font-weight: bold;
+        transition: color 0.2s ease;
+    }
+
+    .chatbot-minimize-button:hover {
+        color: #ff769e;
+    }
+
+
+    .background-animal {
+      position: fixed;
+      width: 150px; /* Larger background animals */
+      opacity: 0.3; /* More subtle */
+      z-index: 0;
+    }
+    .cat {
+      top: 80px;
+      left: -200px;
+      animation: moveCat 25s linear infinite; /* Slower animation */
+    }
+    .dog {
+      bottom: 60px;
+      right: -200px;
+      animation: moveDog 30s linear infinite; /* Slower animation */
+    }
+    .bird {
+      top: 15%;
+      right: -150px;
+      animation: moveBird 20s linear infinite;
+      transform: scaleX(-1); /* Initially face left */
+    }
+    .bunny {
+        bottom: 100px;
+        left: -100px;
+        animation: moveBunny 35s linear infinite;
+    }
+    @keyframes moveCat {
+      0% { left: -200px; transform: rotateY(0deg); }
+      50% { left: calc(100% + 50px); transform: rotateY(0deg); }
+      50.01% { transform: rotateY(180deg); } /* Flip to appear to move left */
+      100% { left: -200px; transform: rotateY(180deg); }
+    }
+    @keyframes moveDog {
+      0% { right: -200px; transform: rotateY(0deg); }
+      50% { right: calc(100% + 50px); transform: rotateY(0deg); }
+      50.01% { transform: rotateY(180deg); } /* Flip to appear to move left */
+      100% { right: -200px; transform: rotateY(180deg); }
+    }
+    @keyframes moveBird {
+        0% { right: -150px; transform: scaleX(-1); }
+        50% { right: calc(100% + 50px); transform: scaleX(-1); }
+        50.01% { transform: scaleX(1); }
+        100% { right: -150px; transform: scaleX(1); }
+    }
+    @keyframes moveBunny {
+        0% { left: -100px; transform: rotateY(0deg); }
+        50% { left: calc(100% + 100px); transform: rotateY(0deg); }
+        50.01% { transform: rotateY(180deg); }
+        100% { left: -100px; transform: rotateY(180deg); }
+    }
+
+    /* Shop Section Styles */
+    .shop-section {
+        background: #fff;
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        text-align: center;
+        margin-top: 3rem;
+    }
+    .shop-items-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+    .shop-item-card {
+        background: #f8f8f8;
+        border-radius: 12px;
+        padding: 1rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .shop-item-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .shop-item-card .item-emoji { /* Style for the large emoji in shop card */
+        font-size: 3em; /* Larger emoji for shop display */
+        line-height: 1;
+        margin-bottom: 0.5rem;
+    }
+    .shop-item-card .item-image { /* Style for the large image in shop card */
+        width: 80px; /* Adjust size as needed */
+        height: 80px;
+        object-fit: contain;
+        margin-bottom: 0.5rem;
+    }
+    .shop-item-card h4 {
+        margin: 0.5rem 0 0.2rem;
+        font-size: 1.2rem;
+        color: #333;
+    }
+    .shop-item-card p {
+        font-size: 0.9rem;
+        color: #666;
+        flex-grow: 1;
+        margin-bottom: 0.8rem;
+    }
+    .shop-item-card .price {
+        font-weight: bold;
+        color: #FFD700; /* Gold for price */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 0.8rem;
+        font-size: 1.1em;
+    }
+    .shop-item-card .price img {
+        width: 20px;
+        height: 20px;
+        margin-right: 5px;
+        vertical-align: middle;
+    }
+    .shop-item-card .price .coin-emoji {
+        font-size: 1.2em;
+        margin-right: 5px;
+    }
+    .shop-item-card button {
+        background: #4CAF50; /* Green for buy button */
+        color: white;
+        border: none;
+        padding: 0.7rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        width: 100%; /* Full width button */
+    }
+    .shop-item-card button:hover {
+        background: #45a049;
+    }
+    .shop-item-card button:disabled {
+        background: #cccccc;
+        cursor: not-allowed;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.95rem;
+      color: #888;
+      margin-top: 3rem;
+      border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+      .intro {
+        font-size: 1.1rem;
+      }
+      .timer span {
+        font-size: 2.2rem;
+      }
+      .timer button {
+        padding: 1rem 1.8rem;
+        font-size: 0.9rem;
+        margin-left: 1rem;
+      }
+      .adopted {
+        grid-template-columns: 1fr;
+      }
+      .chatbot {
+        width: calc(100% - 40px);
+        left: 20px;
+        right: 20px;
+      }
+      .virtual-coins-display {
+          font-size: 0.9em;
+          padding: 6px 10px;
+      }
+      .virtual-coins-display img {
+          width: 20px;
+          height: 20px;
+      }
+      .shop-items-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <img src="pngtree-cute-cat-sticker-cartoon-kitten-kitty-png-image_9029344.png" class="background-animal cat" alt="moving cat">
+  <img src="doggy.png" class="background-animal dog" alt="moving dog">
+  <img src="birdy.png" class="background-animal bird" alt="moving bird">
+  <img src="bunny.png" class="background-animal bunny" alt="moving bunny">
+
+  <header>
+    <h1>Adopt & Learn</h1>
+    <p>Learn and earn your own virtual pets! 🐾</p>
+  </header>
+
+  <main>
+    <div class="intro">
+      <p>Start a study session and watch the timer! For every **2 hours** you focus, you'll earn the chance to choose and adopt a wonderful rescued animal buddy!</p>
+    </div>
+
+    <div class="timer-section">
+        <p style="color: #6a0572; font-weight: bold; margin-bottom: 1rem;">📢 Play the 3D Game with your adopted pets to earn more coins! 💸</p>
+      <div class="virtual-coins-display">
+        <span class="coin-emoji">💸</span>
+        <span id="coinsDisplay">0</span>
+      </div>
+      <h2>Your Study Progress</h2>
+      <div class="timer">
+        <span id="time">0h 0m</span>
+        <button id="startButton">Start Learning</button>
+      </div>
+      <button id="adoptButton" class="timer button adopt-button" disabled>Study more to Adopt a Buddy!</button>
+      <button id="resetButton" class="timer button reset-button">Reset All Progress</button> </div>
+
+    <section>
+      <h2 style="text-align:center; margin-top: 3rem; color: #6a0572;">Your Adopted Buddies:</h2>
+      <div class="adopted" id="adoptedList">
+        </div>
+    </section>
+
+    <section class="shop-section">
+        <h2 style="text-align:center; color: #6a0572;">Pet Shop!</h2>
+        <p>Spend your hard-earned coins on fun items for your adopted buddies!</p>
+        <div class="shop-items-grid" id="shopItemsGrid">
+            </div>
+    </section>
+
+  </main>
+
+  <div class="chatbot" id="chatbot">
+    <button class="chatbot-minimize-button" id="minimizeChatbotButton">X</button>
+    <strong>Max the Buddy 🐶</strong>
+    <div class="conversation-history" id="conversationHistory">
+      <div class="message bot">Hello there! How can I help you today?</div>
+    </div>
+    <input type="text" id="botInput" placeholder="Type your question...">
+  </div>
+
+  <footer>
+    &copy; 2025 Adopt & Learn - Learning with heart 🐶🐱
+  </footer>
+
+  <div id="adoptModal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <h2>Choose Your New Buddy!</h2>
+      <p>Congratulations! You've studied enough to adopt a new friend. Pick one that captures your heart!</p>
+      <div class="modal-animals" id="modalAnimalList">
+        </div>
+      <button id="confirmAdoptBtn" class="modal-adopt-btn" disabled>Adopt This Buddy</button>
+    </div>
+  </div>
+
+  <script>
+    let minutes = 0;
+    let timerInterval;
+    let availableAdoptions = 0; // Tracks how many animals can be adopted
+    let timerRunning = false; // New flag to track timer state
+    let virtualCoins = 0; // New: Virtual currency for the user
+
+    // Array to store adopted animal data for persistence
+    let adoptedBuddies = [];
+    // Array to store conversation history
+    let conversationHistory = [{ sender: 'bot', text: 'Hello there! How can I help you today?' }];
+
+
+    const adoptedList = document.getElementById('adoptedList');
+    const timeDisplay = document.getElementById('time');
+    const startButton = document.getElementById('startButton');
+    const adoptButton = document.getElementById('adoptButton');
+    const coinsDisplay = document.getElementById('coinsDisplay'); // New: Coins display element
+    const resetButton = document.getElementById('resetButton'); // New: Reset button
+
+    const adoptModal = document.getElementById('adoptModal');
+    const closeButton = document.querySelector('.close-button');
+    const modalAnimalList = document.getElementById('modalAnimalList');
+    const confirmAdoptBtn = document.getElementById('confirmAdoptBtn');
+
+    const chatbotDiv = document.getElementById('chatbot'); // Get the chatbot div
+    const minimizeChatbotButton = document.getElementById('minimizeChatbotButton'); // Get the minimize button
+    const conversationHistoryDiv = document.getElementById('conversationHistory');
+    const botInput = document.getElementById('botInput');
+
+    const shopItemsGrid = document.getElementById('shopItemsGrid'); // New: Shop items container
+
+
+    // Animal data with real-looking images and more detailed descriptions
+    const allAnimals = [
+      { name: 'Buddy', image:'dog-im-a-golden-retriever-but-i-never-retrieve-gold.jpeg', desc: 'A playful golden retriever mix, loves long walks and belly rubs. Rescued from a busy shelter, now looking for a forever home.', type: 'dog', items: [] },
+      { name: 'Whiskers', image: 'tabby_cat.jpg', desc: 'A curious tabby cat with striking green eyes. She enjoys lounging in sunbeams and chasing laser pointers. A gentle soul who needs a calm environment.', type: 'cat', items: [] },
+      { name: 'Shadow', image: 'black_labrador.jpeg', desc: 'A sleek black Labrador, very intelligent and loyal. He thrives on training and companionship. Perfect for an active family who loves the outdoors.', type: 'dog', items: [] },
+      { name: 'Daisy', image: 'pomeranian.png', desc: 'A small, fluffy Pomeranian with a big personality. Daisy loves to be the center of attention and enjoys short playful bursts. Ideal for apartment living.', type: 'dog', items: [] },
+      { name: 'Captain', image: 'ginger_cat.jpg', desc: 'An independent yet affectionate ginger cat. Captain enjoys exploring but always returns for a good nap. He would do well in a home with lots of windows.', type: 'cat', items: [] },
+      { name: 'Rocky', image: 'german_shepherd.jpg', desc: 'A brave German Shepherd, very protective and intelligent. Rocky needs an experienced owner and loves having a job to do. He forms strong bonds with his family.', type: 'dog', items: [] },
+      { name: 'Misty', image: 'siamese_cat.jpg', desc: 'A sleek Siamese cat, known for her vocal nature and striking blue eyes. Misty is very social and loves to be involved in everything. Requires lots of interaction.', type: 'cat', items: [] },
+      { name: 'Buster', image: 'bulldog.png', desc: 'A goofy bulldog with a heart of gold. Buster loves to play fetch and snore loudly while napping. He’s looking for a family who appreciates his charmingly clumsy nature.', type: 'dog', items: [] },
+    ];
+
+    // UPDATED: Shop items data with emojis and image URLs
+    const shopItems = [
+        { name: 'Red Ball', display: '🔴', type: 'emoji', price: 20, description: 'A bouncy red ball for endless fun!' },
+        { name: 'Comfy Bed', display: 'pet_bed.png', type: 'image', price: 50, description: 'The coziest spot for a good nap.' },
+        { name: 'Yummy Treat', display: '🍖', type: 'emoji', price: 10, description: 'A delicious snack your buddy will love.' },
+        { name: 'Fancy Collar', display: '🎗️', type: 'emoji', price: 30, description: 'Make your pet stylish!' },
+        { name: 'Feather Wand', display: '🪄', type: 'emoji', price: 25, description: 'Irresistible for playful cats.' },
+        { name: 'Chew Toy', display: '🦴', type: 'emoji', price: 15, description: 'Perfect for those puppy teeth.' },
+        { name: 'Water Bowl', display: '💧', type: 'emoji', price: 5, description: 'Stay hydrated, furry friend!' },
+        { name: 'Brush', display: '🧴', type: 'emoji', price: 20, description: 'Keep that fur shiny and tangle-free.' },
+    ];
+
+
+    let availableAnimals = []; // Animals currently available for adoption
+
+    // Sweet messages for the post-adoption button
+    const sweetMessages = [
+        "Yay! Time to play with your new friend!",
+        "Awesome! Your adopted buddy is excited to meet you!",
+        "Fantastic! Let's explore with your new companion!",
+        "Hooray! Go have fun with your furry pal!"
+    ];
+
+    function updateDisplay() {
+      timeDisplay.textContent = `${Math.floor(minutes / 60)}h ${minutes % 60}m`;
+      if (availableAdoptions > 0) {
+        adoptButton.disabled = false;
+        adoptButton.textContent = `Adopt a Buddy! (${availableAdoptions} available)`;
+      } else {
+        adoptButton.disabled = true;
+        adoptButton.textContent = "Study more to Adopt a Buddy!";
+      }
+      coinsDisplay.textContent = virtualCoins; // Update coins display
+      renderShop(); // Re-render shop to update button states
+    }
+
+    function saveToLocalStorage() {
+        localStorage.setItem('studyMinutes', minutes);
+        localStorage.setItem('adoptedBuddies', JSON.stringify(adoptedBuddies));
+        const availableAnimalNames = availableAnimals.map(animal => animal.name);
+        localStorage.setItem('availableAnimalNames', JSON.stringify(availableAnimalNames));
+        localStorage.setItem('conversationHistory', JSON.stringify(conversationHistory));
+        localStorage.setItem('virtualCoins', virtualCoins); // Save virtual coins
+        localStorage.setItem('timerRunning', timerRunning); // Always save the current timerRunning state
+    }
+
+    function loadFromLocalStorage() {
+        const savedMinutes = localStorage.getItem('studyMinutes');
+        minutes = savedMinutes !== null ? parseInt(savedMinutes, 10) : 0;
+
+        const savedAdoptedBuddies = localStorage.getItem('adoptedBuddies');
+        if (savedAdoptedBuddies) {
+            adoptedBuddies = JSON.parse(savedAdoptedBuddies);
+            // Ensure adopted animals have an 'items' array, initialize if missing
+            adoptedBuddies.forEach(animal => {
+                if (!animal.items) {
+                    animal.items = [];
+                }
+            });
+            adoptedList.innerHTML = ''; // Clear current display before re-rendering from loaded data
+            adoptedBuddies.forEach(animal => displayAdoptedAnimal(animal));
+        } else {
+            adoptedBuddies = []; // Ensure it's an empty array if nothing is saved
+        }
+
+        const savedAvailableAnimalNames = localStorage.getItem('availableAnimalNames');
+        if (savedAvailableAnimalNames) {
+            const names = JSON.parse(savedAvailableAnimalNames);
+            // Reconstruct availableAnimals based on allAnimals and saved names
+            availableAnimals = allAnimals.filter(animal => names.includes(animal.name));
+        } else {
+            // If no saved available animals, all animals are initially available
+            availableAnimals = [...allAnimals];
+        }
+
+        const savedConversationHistory = localStorage.getItem('conversationHistory');
+        if (savedConversationHistory) {
+            conversationHistory = JSON.parse(savedConversationHistory);
+            displayConversationHistory();
+        } else {
+            conversationHistory = [{ sender: 'bot', text: 'Hello there! How can I help you today?' }]; // Default message
+        }
+
+        const savedVirtualCoins = localStorage.getItem('virtualCoins');
+        virtualCoins = savedVirtualCoins !== null ? parseInt(savedVirtualCoins, 10) : 0;
+
+        const savedTimerRunning = localStorage.getItem('timerRunning');
+        timerRunning = savedTimerRunning === 'true'; // Set actual boolean from storage
+
+        // Check for coins from game and add them
+        const gameCoinsEarned = localStorage.getItem('gameCoinsEarned');
+        if (gameCoinsEarned) {
+            const earned = parseInt(gameCoinsEarned, 10);
+            if (earned > 0) {
+                virtualCoins += earned;
+                addMessageToHistory('bot', `Wow! You earned ${earned} coins from playing! Your coin balance is now ${virtualCoins}.`);
+            }
+            localStorage.removeItem('gameCoinsEarned'); // Clear it after adding
+        }
+
+
+        // Recalculate availableAdoptions based on current minutes and adopted buddies
+        availableAdoptions = Math.floor(minutes / 120) - adoptedBuddies.length;
+        if (availableAdoptions < 0) availableAdoptions = 0;
+        // Also cap availableAdoptions by the actual number of animals left to adopt
+        availableAdoptions = Math.min(availableAdoptions, availableAnimals.length);
+
+        updateDisplay();
+    }
+
+
+    function startTimer() {
+        if (!timerRunning) {
+            timerRunning = true;
+            startButton.textContent = 'Pause Learning';
+            timerInterval = setInterval(() => {
+                minutes++;
+                updateDisplay();
+                saveToLocalStorage(); // Save every second
+                // For testing, you can change 'minutes % 120' to 'minutes % 10' for example
+                if (minutes % 120 === 0 && availableAnimals.length > 0) {
+                    availableAdoptions++;
+                    updateDisplay();
+                    saveToLocalStorage(); // Save immediately when an adoption is available
+                }
+            }, 1000); // Update every second
+        } else {
+            // Pause logic
+            timerRunning = false;
+            clearInterval(timerInterval);
+            startButton.textContent = 'Resume Learning';
+        }
+    }
+
+    function openAdoptModal() {
+      if (availableAnimals.length === 0) {
+        addMessageToHistory('bot', "You've adopted all available buddies! Keep studying for future friends!");
+        return;
+      }
+      if (availableAdoptions === 0) {
+        addMessageToHistory('bot', "You need to study more to adopt a new buddy! Keep up the great work!");
+        return;
+      }
+
+      modalAnimalList.innerHTML = ''; // Clear previous list
+      let selectedAnimal = null;
+
+      // Filter availableAnimals to only show those not yet adopted
+      const currentAvailableForModal = allAnimals.filter(animal =>
+          !adoptedBuddies.some(adopted => adopted.name === animal.name)
+      );
+
+
+      currentAvailableForModal.forEach(animal => {
+        const card = document.createElement('div');
+        card.className = 'modal-animal-card';
+        card.innerHTML = `
+          <img src="${animal.image}" alt="${animal.name}" />
+          <h4>${animal.name}</h4>
+          <p>${animal.desc}</p>
+        `;
+        card.addEventListener('click', () => {
+          // Deselect previous
+          const prevSelected = document.querySelector('.modal-animal-card.selected');
+          if (prevSelected) {
+            prevSelected.classList.remove('selected');
+          }
+          // Select current
+          card.classList.add('selected');
+          selectedAnimal = animal;
+          confirmAdoptBtn.disabled = false;
+        });
+        modalAnimalList.appendChild(card);
+      });
+
+      confirmAdoptBtn.disabled = true; // Disable until an animal is selected
+      adoptModal.style.display = 'flex';
+    }
+
+    function displayAdoptedAnimal(animal) {
+        const card = document.createElement('div');
+        card.className = 'animal';
+        const randomIndex = Math.floor(Math.random() * sweetMessages.length);
+        const randomMessage = sweetMessages[randomIndex];
+
+        // Pass animal type (dog/cat) to the game to potentially load specific models
+        // Ensure play.html is in the same directory as pets.html
+        const gameUrl = `play.html?name=${encodeURIComponent(animal.name)}&img=${encodeURIComponent(animal.image)}&type=${encodeURIComponent(animal.type || 'unknown')}`;
+
+        // Render items for this animal
+        let itemsHtml = '';
+        if (animal.items && animal.items.length > 0) {
+            itemsHtml += '<div class="animal-items"><strong>Their Items:</strong><ul>';
+            animal.items.forEach(item => {
+                if (item.type === 'emoji') {
+                    itemsHtml += `<li><span class="item-emoji">${item.display}</span> ${item.name}</li>`;
+                } else if (item.type === 'image') {
+                    itemsHtml += `<li><img src="${item.display}" alt="${item.name}" class="item-image" /> ${item.name}</li>`;
+                }
+            });
+            itemsHtml += '</ul></div>';
+        }
+
+
+        card.innerHTML = `
+          <img src="${animal.image}" alt="${animal.name}" />
+          <h3>${animal.name}</h3>
+          <p>${animal.desc}</p>
+          <p class="adopted-status"><em>Adopted after ${Math.floor(animal.minutesStudied / 60)}h ${animal.minutesStudied % 60}m of study!</em></p>
+          ${itemsHtml} <a href="${gameUrl}" target="_blank" class="game-button">${randomMessage.replace('[Buddy\'s Name]', animal.name)} Play with ${animal.name}!</a>
+          <button class="message-button" data-animal-name="${animal.name}">Message ${animal.name}!</button>
+        `;
+        adoptedList.appendChild(card);
+
+        // Add event listener for the new message button
+        card.querySelector('.message-button').addEventListener('click', (event) => {
+            const animalName = event.target.dataset.animalName;
+            botInput.value = `Tell me more about ${animalName}`;
+            botInput.focus();
+        });
+    }
+
+    function adoptSelectedAnimal() {
+      const selectedCard = document.querySelector('.modal-animal-card.selected');
+      if (!selectedCard) {
+        addMessageToHistory('bot', "Please select an animal to adopt!");
+        return;
+      }
+
+      const animalName = selectedCard.querySelector('h4').textContent;
+      const animalToAdopt = allAnimals.find(animal => animal.name === animalName); // Find from allAnimals
+
+      if (animalToAdopt) {
+        // Create a deep copy to ensure items array is unique for each adopted instance
+        const adoptedAnimalCopy = JSON.parse(JSON.stringify(animalToAdopt));
+
+        // Add to adoptedBuddies array with the study time at adoption
+        const currentStudyTime = minutes; // Capture current minutes
+        adoptedAnimalCopy.minutesStudied = currentStudyTime;
+        // Initialize items array for the new adopted animal if it's not already there
+        if (!adoptedAnimalCopy.items) {
+            adoptedAnimalCopy.items = [];
+        }
+        adoptedBuddies.push(adoptedAnimalCopy);
+
+        // Remove the adopted animal from the availableAnimals list so it doesn't show up in the modal again
+        availableAnimals = availableAnimals.filter(animal => animal.name !== adoptedAnimalCopy.name);
+
+
+        displayAdoptedAnimal(adoptedAnimalCopy); // Call the function to display it
+
+        availableAdoptions--;
+        virtualCoins += 5; // Bonus coins for adopting!
+        addMessageToHistory('bot', `Congratulations! You've adopted ${adoptedAnimalCopy.name}! You also earned 5 coins! 🎉 Your balance is now ${virtualCoins}.`);
+
+        saveToLocalStorage(); // Save after adoption
+        updateDisplay();
+        adoptModal.style.display = 'none';
+
+      } else {
+        addMessageToHistory('bot', "Error: Selected animal not found.");
+      }
+    }
+
+    function resetProgress() {
+        if (confirm("Are you sure you want to reset all your progress? This cannot be undone!")) {
+            // Clear local storage items
+            localStorage.removeItem('studyMinutes');
+            localStorage.removeItem('adoptedBuddies');
+            localStorage.removeItem('availableAnimalNames');
+            localStorage.removeItem('conversationHistory');
+            localStorage.removeItem('virtualCoins');
+            localStorage.setItem('timerRunning', 'false'); // Explicitly set to false on reset
+            localStorage.removeItem('buyingItemName');
+            localStorage.removeItem('buyingItemPrice');
+            localStorage.removeItem('gameCoinsEarned');
+
+
+            // Reset in-memory variables to initial states
+            minutes = 0;
+            availableAdoptions = 0;
+            timerRunning = false;
+            virtualCoins = 0;
+            adoptedBuddies = [];
+            conversationHistory = [{ sender: 'bot', text: 'Hello there! How can I help you today?' }];
+            availableAnimals = [...allAnimals]; // Reset available animals to all original animals
+
+            // Clear timer if it's running
+            clearInterval(timerInterval);
+            startButton.textContent = 'Start Learning';
+
+            // Update UI elements
+            adoptedList.innerHTML = ''; // Clear adopted animals display
+            displayConversationHistory(); // Re-display initial bot message
+            updateDisplay(); // Update time, coins, and adopt button state
+            renderShop(); // Re-render shop to enable all items and update prices
+            addMessageToHistory('bot', "All your progress has been reset. Start fresh! 🌱");
+        }
+    }
+
+
+    startButton.addEventListener('click', startTimer);
+    adoptButton.addEventListener('click', openAdoptModal);
+    closeButton.addEventListener('click', () => adoptModal.style.display = 'none');
+    confirmAdoptBtn.addEventListener('click', adoptSelectedAnimal);
+    resetButton.addEventListener('click', resetProgress); // New: Event listener for reset button
+    minimizeChatbotButton.addEventListener('click', () => { // New: Event listener for minimize button
+        chatbotDiv.classList.toggle('minimized');
+    });
+
+
+    // Close the modal if the user clicks anywhere outside of it
+    window.addEventListener('click', (event) => {
+      if (event.target === adoptModal) {
+        adoptModal.style.display = 'none';
+      }
+    });
+
+
+    // Chatbot functionality
+    const badWords = ['stupid', 'dumb', 'idiot', 'fool', 'hate', 'kill', 'fuck', 'shit', 'bitch', 'cock', 'pussy', 'nude', 'sex', 'asshole', 'damn', 'hell', 'crap'];
+
+    const funFacts = [
+        "Did you know a group of pugs is called a 'grumble'? 🐶",
+        "Cats can make over 100 different sounds, while dogs can only make about 10! 🐱",
+        "A newborn kangaroo is about the size of a lima bean! 🦘",
+        "The fingerprints of a koala are so similar to humans that they have been confused at crime scenes! 🐨",
+        "Butterflies taste with their feet! 🦋",
+        "A snail can sleep for three years. 🐌",
+        "Octopuses have three hearts. 🐙",
+        "Only female mosquitoes bite. 🦟"
+    ];
+
+    function addMessageToHistory(sender, text) {
+        const messageElement = document.createElement('div');
+        messageElement.classList.add('message', sender);
+        messageElement.textContent = text;
+        conversationHistoryDiv.appendChild(messageElement);
+        conversationHistoryDiv.scrollTop = conversationHistoryDiv.scrollHeight; // Scroll to bottom
+        conversationHistory.push({ sender, text });
+        saveToLocalStorage(); // Save history after each message
+    }
+
+    function displayConversationHistory() {
+        conversationHistoryDiv.innerHTML = ''; // Clear current display
+        conversationHistory.forEach(msg => {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', msg.sender);
+            messageElement.textContent = msg.text;
+            conversationHistoryDiv.appendChild(messageElement);
+        });
+        conversationHistoryDiv.scrollTop = conversationHistoryDiv.scrollHeight; // Scroll to bottom
+    }
+
+
+    // Shop functions
+    function renderShop() {
+        shopItemsGrid.innerHTML = ''; // Clear current shop display
+        shopItems.forEach(item => {
+            const itemCard = document.createElement('div');
+            itemCard.className = 'shop-item-card';
+
+            let itemDisplayHtml = '';
+            if (item.type === 'emoji') {
+                itemDisplayHtml = `<span class="item-emoji">${item.display}</span>`;
+            } else if (item.type === 'image') {
+                itemDisplayHtml = `<img src="${item.display}" alt="${item.name}" class="item-image" />`;
+            }
+
+            itemCard.innerHTML = `
+                ${itemDisplayHtml} <h4>${item.name}</h4>
+                <p>${item.description}</p>
+                <div class="price">
+                    <span class="coin-emoji">💸</span>
+                    <span>${item.price}</span>
+                </div>
+                <button data-item-name="${item.name}" data-item-price="${item.price}">Buy</button>
+            `;
+            const buyButton = itemCard.querySelector('button');
+            buyButton.disabled = virtualCoins < item.price; // Disable if not enough coins
+            buyButton.addEventListener('click', () => buyItem(item.name, item.price));
+            shopItemsGrid.appendChild(itemCard);
+        });
+    }
+
+    function buyItem(itemName, price) {
+        if (virtualCoins >= price) {
+            if (adoptedBuddies.length === 0) {
+                addMessageToHistory('bot', "You need to adopt a pet first before buying items for them! 😉");
+                return;
+            }
+
+            // Simple selection logic: ask user which pet to assign the item to
+            let petSelectionMessage = "Which adopted buddy should get this item? Type their name into the chat!";
+            const petNames = adoptedBuddies.map(p => p.name);
+            petSelectionMessage += ` Your buddies are: ${petNames.join(', ')}.`;
+
+            addMessageToHistory('bot', petSelectionMessage);
+
+            // Temporarily store the item being bought and its cost
+            localStorage.setItem('buyingItemName', itemName);
+            localStorage.setItem('buyingItemPrice', price);
+
+            // Temporarily disable shop buttons to prevent multiple purchases
+            document.querySelectorAll('.shop-item-card button').forEach(button => button.disabled = true);
+
+        } else {
+            addMessageToHistory('bot', `You don't have enough coins to buy ${itemName}. You need ${price} coins, but you only have ${virtualCoins}.`);
+        }
+    }
+
+    // New chatbot handler for assigning items after a "buy" command
+    function handleAssignItemToPet(petName) {
+        const itemNameToBuy = localStorage.getItem('buyingItemName');
+        const itemPrice = parseInt(localStorage.getItem('buyingItemPrice'), 10);
+
+        if (!itemNameToBuy) {
+            addMessageToHistory('bot', "It seems you haven't selected an item to buy yet.");
+            return;
+        }
+
+        const targetPet = adoptedBuddies.find(pet => pet.name.toLowerCase() === petName.toLowerCase());
+
+        if (targetPet) {
+            const itemDetails = shopItems.find(item => item.name === itemNameToBuy);
+            if (itemDetails) {
+                if (virtualCoins >= itemPrice) { // Double-check coins
+                    virtualCoins -= itemPrice;
+                    targetPet.items.push(itemDetails); // Add item details to the pet
+                    addMessageToHistory('bot', `Great! You bought a ${itemNameToBuy} for ${targetPet.name}! Your balance is now ${virtualCoins} coins.`);
+                    saveToLocalStorage();
+                    updateDisplay(); // Re-render everything to show new items and coin balance
+                    // Re-render only the adopted animals part to update items list for the pet
+                    adoptedList.innerHTML = '';
+                    adoptedBuddies.forEach(animal => displayAdoptedAnimal(animal));
+
+                } else {
+                    addMessageToHistory('bot', `Oops! It looks like you no longer have enough coins for ${itemNameToBuy}. You need ${itemPrice} but only have ${virtualCoins}.`);
+                }
+            } else {
+                addMessageToHistory('bot', `Sorry, I can't find details for the item: ${itemNameToBuy}.`);
+            }
+        } else {
+            addMessageToHistory('bot', `I couldn't find an adopted buddy named "${petName}". Please make sure you spell their name correctly!`);
+            // Give user another chance to pick
+            const petNames = adoptedBuddies.map(p => p.name);
+            addMessageToHistory('bot', `Your buddies are: ${petNames.join(', ')}. Which one should get the ${itemNameToBuy}?`);
+            return; // Don't clear buying item info yet
+        }
+
+        // Clear temporary buying info
+        localStorage.removeItem('buyingItemName');
+        localStorage.removeItem('buyingItemPrice');
+        // Re-enable shop buttons
+        renderShop(); // This will re-render and enable/disable based on current coins
+    }
+
+
+    botInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        const input = botInput.value.toLowerCase().trim();
+        addMessageToHistory('user', input);
+        botInput.value = '';
+
+        // Check if the user is in the process of assigning an item
+        const buyingItemName = localStorage.getItem('buyingItemName');
+        if (buyingItemName) {
+            handleAssignItemToPet(input); // User's input is expected to be the pet's name
+            return; // Exit here, as assignment is handled
+        }
+
+        let botResponseText = '';
+
+        // --- Existing chatbot logic continues here ---
+        // Check for specific animal inquiries
+        const tellMeAboutMatch = input.match(/tell me more about (.*)/);
+        if (tellMeAboutMatch && tellMeAboutMatch[1]) {
+            const animalName = tellMeAboutMatch[1].trim();
+            const foundAnimal = adoptedBuddies.find(animal => animal.name.toLowerCase() === animalName.toLowerCase());
+            if (foundAnimal) {
+                let itemsList = '';
+                if (foundAnimal.items && foundAnimal.items.length > 0) {
+                    itemsList = ` They have these items: ${foundAnimal.items.map(item => {
+                        if (item.type === 'emoji') {
+                            return `${item.display} ${item.name}`;
+                        } else if (item.type === 'image') {
+                            return `${item.name}`; // For chatbot, just name is fine for image items
+                        }
+                    }).join(', ')}.`;
+                }
+                botResponseText = `Ah, ${foundAnimal.name}! ${foundAnimal.desc} They were adopted after ${Math.floor(foundAnimal.minutesStudied / 60)}h ${foundAnimal.minutesStudied % 60}m of study!${itemsList} What a wonderful friend!`;
+            } else {
+                botResponseText = `I don't seem to know an animal named "${animalName}" in your adopted buddies list. Did you mean one of your adopted pets?`;
+            }
+        } else if (input.includes('how does this work') || input.includes('how to adopt')) {
+          botResponseText = "This website helps you stay motivated to learn! Here's how it works: 1. Click 'Start Learning' to begin a study session. The timer will track your progress. 2. For every 2 hours of focused study, you'll earn the chance to adopt a new virtual animal buddy! 3. Click the 'Adopt a Buddy!' button when available to choose your new friend from a selection of adorable rescued animals. 4. Once adopted, you can click the 'Play with [Buddy\'s Name]!' button on their card to launch a fun mini-game where you play as your pet! You also earn coins by playing games and adopting, which you can spend in the shop! All your progress and adopted buddies are saved automatically. Happy learning! 🎉";
+        } else if (input.includes('show me my pets') || input.includes('list my pets') || input.includes('my adopted animals')) {
+            if (adoptedBuddies.length > 0) {
+                const names = adoptedBuddies.map(b => b.name).join(', ');
+                botResponseText = `Your current adopted friends are: ${names}. Aren't they lovely?`;
+            } else {
+                botResponseText = "You haven't adopted any buddies yet! Start learning to earn your first friend. 🐾";
+            }
+        } else if (input.includes('how many pets can i adopt') || input.includes('how many adoptions available') || input.includes('more adoptions')) {
+            const totalAvailableForAdoption = allAnimals.length - adoptedBuddies.length;
+            if (availableAdoptions > 0) {
+                botResponseText = `You currently have ${availableAdoptions} adoption(s) available! Go ahead and click the 'Adopt a Buddy!' button. There are ${totalAvailableForAdoption} unique animals still waiting to be adopted in total!`;
+            } else if (totalAvailableForAdoption > 0) {
+                 botResponseText = `You need to study a bit more to earn your next adoption, but you're doing great! There are still ${totalAvailableForAdoption} unique animals waiting to find a home. Keep up the good work!`;
+            } else {
+                botResponseText = "You've adopted all our current buddies! Amazing job! You are a true animal hero! 🎉";
+            }
+        } else if (input.includes('coins') || input.includes('my money') || input.includes('balance')) {
+            botResponseText = `You currently have ${virtualCoins} coins. You can earn more by studying and playing games!`;
+        } else if (input.includes('shop') || input.includes('buy items') || input.includes('what can i buy')) {
+            if (shopItems.length > 0) {
+                const itemNames = shopItems.map(item => {
+                    if (item.type === 'emoji') {
+                        return `${item.display} ${item.name} (${item.price} coins)`;
+                    } else if (item.type === 'image') {
+                        return `${item.name}`; // For chatbot, just name is fine for image items
+                    }
+                }).join(', ');
+                botResponseText = `Welcome to the Pet Shop! You can buy items like: ${itemNames}. Just find them in the shop section below and click 'Buy'!`;
+            } else {
+                botResponseText = `The shop is currently empty. Check back later for new items!`;
+            }
+        } else if (input.includes('items for pets') || input.includes('what items do my pets have')) {
+            if (adoptedBuddies.length === 0) {
+                botResponseText = "You don't have any adopted pets yet to have items! Adopt one first!";
+            } else {
+                let itemsOverview = "Here's what your pets have:\n";
+                let hasItems = false;
+                adoptedBuddies.forEach(animal => {
+                    if (animal.items && animal.items.length > 0) {
+                        itemsOverview += `${animal.name}: ${animal.items.map(item => {
+                            if (item.type === 'emoji') {
+                                return `${item.display} ${item.name}`;
+                            } else if (item.type === 'image') {
+                                return `${item.name}`; // For chatbot, just name is fine for image items
+                            }
+                        }).join(', ')}\n`;
+                        hasItems = true;
+                    }
+                });
+                if (hasItems) {
+                    botResponseText = itemsOverview;
+                } else {
+                    botResponseText = "None of your adopted pets currently have any items. You can buy some in the shop!";
+                }
+            }
+        }
+        else if (input === '') {
+          botResponseText = "It seems you didn't type anything. What's on your mind? 💬";
+        } else if (badWords.some(word => input.includes(word))) {
+          botResponseText = "Hey... let's be kind and positive here, okay? 🐾 We're all about learning and kindness!";
+        } else if (input.includes('hello') || input.includes('hi') || input.includes('hey')) {
+          const greetings = ["Hi there! How can I help you today? 👋", "Hello! Ready to learn and play? 🐶", "Hey! Nice to see you! What's up? 😊"];
+          botResponseText = greetings[Math.floor(Math.random() * greetings.length)];
+        } else if (input.includes('motivate') || input.includes('encouragement')) {
+          const motivations = ["You're doing great! Every minute you learn brings you closer to your goals and a new furry companion. Keep pushing! 💪", "Don't give up! Your future self (and your pets!) will thank you for all this hard work. You got this! ✨", "Learning is an adventure, and you're the hero! Keep exploring new knowledge! 🚀"];
+          botResponseText = motivations[Math.floor(Math.random() * motivations.length)];
+        } else if (input.includes('bye') || input.includes('see you') || input.includes('goodbye')) {
+          const farewells = ["See you later, champ! Keep learning and remember your buddies are cheering for you! 🐾", "Goodbye! Come back soon to learn more and play! 👋", "Farewell! Wishing you a productive day! 🌟"];
+          botResponseText = farewells[Math.floor(Math.random() * farewells.length)];
+        } else if (input.includes('who are you') || input.includes('your name')) {
+          botResponseText = "I'm Max, your loyal buddy and cheerleader! I'm here to help you stay motivated, answer your questions, and make sure you have fun. 🐶";
+        } else if (input.includes('animals') || input.includes('pets') || input.includes('buddies')) {
+          const adoptedCount = adoptedBuddies.length;
+          const remainingCount = availableAnimals.length;
+          let response = `You've adopted ${adoptedCount} amazing buddies so far! `;
+          if (remainingCount > 0) {
+              response += `There are still ${remainingCount} unique animals waiting to find a home. Keep up the great work to meet them all! 🐾`;
+          } else {
+              response += "You've adopted all our current buddies! Amazing job! Perhaps we'll have new friends in the future. 🎉";
+          }
+          if (adoptedCount > 0) {
+              const names = adoptedBuddies.map(b => b.name).join(', ');
+              response += ` Your current adopted friends are: ${names}.`;
+          }
+          botResponseText = response;
+        } else if (input.includes('timer') || input.includes('time') || input.includes('progress')) {
+          const hours = Math.floor(minutes / 60);
+          const mins = minutes % 60;
+          botResponseText = `You've currently focused for ${hours} hours and ${mins} minutes. Keep going! Every minute counts! ⏳`;
+        } else if (input.includes('thank you') || input.includes('thanks')) {
+          const thanksResponses = ["You're very welcome! Always here to help! 😊", "No problem at all! Keep up the fantastic work! ✨", "My pleasure! Glad I could assist! 👍"];
+          botResponseText = thanksResponses[Math.floor(Math.random() * thanksResponses.length)];
+        } else if (input.includes('fun fact') || input.includes('tell me something interesting')) {
+            const fact = funFacts[Math.floor(Math.random() * funFacts.length)];
+            botResponseText = fact;
+        } else if (input.includes('game') || input.includes('play with pets')) {
+            if (adoptedBuddies.length > 0) {
+                botResponseText = `Yes! Once you adopt a buddy, you can click the "Play with [Buddy's Name]!" button on their card to launch a fun game where you play as your pet! Remember, playing games can earn you coins! 🎉`;
+            } else {
+                botResponseText = `You need to adopt a buddy first! Once you do, a button will appear on their card to play a special game with them. Start learning to adopt your first friend! 🎮`;
+            }
+        } else if (input.includes('what should i study') || input.includes('study advice')) {
+            botResponseText = "Focus on what truly interests you! Whether it's a new language, coding, history, or anything else, passionate learning is the most effective. Good luck! 💡";
+        } else {
+          botResponseText = "Hmm, I'm still learning! Could you try rephrasing that, or ask me about: how this works, your animals, your study progress, coins, the shop, or for some motivation! 🧐";
+        }
+
+        addMessageToHistory('bot', botResponseText);
+      }
+    });
+
+
+    // Initial load and display update
+    document.addEventListener('DOMContentLoaded', () => {
+        loadFromLocalStorage();
+        // If timer was running when page was closed, resume it
+        if (timerRunning) { // Use the 'timerRunning' variable loaded from local storage
+            startTimer(); // This will effectively "resume" it
+        }
+    });
+
+    // Save timer state on page unload
+    window.addEventListener('beforeunload', () => {
+        saveToLocalStorage(); // This will save the current timerRunning state
+    });
+
+    // Modified: Event listener for messages from child window (play.html)
+    window.addEventListener('message', (event) => {
+        // Ensure the message is from a trusted origin if deployed
+        // For local development, '*' is fine.
+        if (event.data && event.data.type === 'ADD_COIN' && event.data.amount) {
+            const amountToAdd = event.data.amount;
+            virtualCoins += amountToAdd;
+            saveToLocalStorage(); // Save updated coins
+            updateDisplay(); // Update display for coins and shop buttons
+
+            // Add visual notification for coins earned
+            const coinNotification = document.createElement('div');
+            coinNotification.textContent = `+${amountToAdd} Coins! 💸`;
+            coinNotification.style.cssText = `
+                position: fixed;
+                top: 80px; /* Adjust position to not overlap with existing elements */
+                right: 20px;
+                background-color: #4CAF50; /* Green background */
+                color: white;
+                padding: 10px 15px;
+                border-radius: 5px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                z-index: 1000;
+                opacity: 0;
+                transform: translateY(-20px);
+                transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            `;
+            document.body.appendChild(coinNotification);
+
+            setTimeout(() => {
+                coinNotification.style.opacity = '1';
+                coinNotification.style.transform = 'translateY(0)';
+            }, 10); // Small delay to trigger transition
+
+            setTimeout(() => {
+                coinNotification.style.opacity = '0';
+                coinNotification.style.transform = 'translateY(-20px)';
+                setTimeout(() => {
+                    coinNotification.remove();
+                }, 500); // Remove after fade out
+            }, 2500); // Display for 2.5 seconds
+        }
+    });
+  </script>
+</body>
+</html>
