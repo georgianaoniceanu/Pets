@@ -126,3 +126,24 @@ win.mp3 (Sound effect for game win)
 loose.mp3 (Sound effect for game over)
 
 kitz.mp3 (Sound effect for collecting a mouse)
+
+## File Structure:
+index.html # Main landing page for Adopt & Learn (includes pet display, adoption logic, bot)
+play.html # The "Cat-ch Me If You Can" mini-game
+assets/audio/comedy.mp3 # Background music for the game
+assets/audio/win.mp3 # Sound effect for game win
+assets/audio/loose.mp3 # Sound effect for game over
+assets/audio/kitz.mp3 # Sound effect for collecting a mouse
+assets/images/grass.jpeg # Ground and Scene Background Texture for the game
+assets/images/background-chase.jpg # Background image for the game's start screen
+models/scene.gltf # Player Cat Model
+models/Muchkin2_baseColor.png # Cat Texture
+models/mouse.glb # Collectible Mouse Model
+models/dog.glb # Enemy Dog Model
+models/desktop_design_cute.glb # In-game obstacle/decoration
+models/rat_plushy.glb # In-game obstacle/decoration
+models/slide_playground.glb # In-game walkable obstacle/decoration
+models/pink_house.glb # In-game obstacle/decoration
+models/paper_box.glb # In-game obstacle/decoration
+models/japanese_cherry_tree_low-poly.glb # In-game obstacle/decoration
+README.md # This file
