@@ -20,7 +20,7 @@ Experience a 3D Play Area: Dive into an immersive environment for the mini-game.
 
 Inspired by the joy of pet ownership and the importance of responsible care, we aim to make people more aware of animals in need and the fun of interacting with them, all within an engaging and playful setting.
 
-⚙️ Core Functionality
+# Core Functionality
 To stimulate continuous engagement and learning, "Adopt & Learn" features a unique gameplay loop:
 
 Timed Adoption System: Every 2 hours (set to 2 minutes in development for quick demonstration), users are eligible to adopt a new animal companion from the available selection. This encourages regular visits and interaction.
@@ -39,7 +39,7 @@ Post-Adoption Actions: After successfully adopting an animal, two key options be
 
 "Play Game" Button: Dive into the exciting 3D mini-game "Cat-ch Me If You Can" with your buddy.
 
-🌟 Features
+# Features
 Games
 "Cat-ch Me If You Can"
 
@@ -63,7 +63,7 @@ Restart/Back to Site: Options at game over/win.
 
 Cash Award Popups: Notifies you of earned coins post-game.
 
-User Interface & Experience
+# User Interface & Experience
 Loading & Error Handling: Provides feedback during 3D model loading.
 
 Instructions Display: Clear in-game controls and objectives.
@@ -71,3 +71,58 @@ Instructions Display: Clear in-game controls and objectives.
 Audio Controls: Toggle music and adjust volume for an immersive experience.
 
 Personalization: Display your chosen buddy's name and image.
+# Technologies Used
+HTML5 / CSS3: For the structure and styling of the web pages, including responsive design.
+
+JavaScript (Vanilla): For all interactive elements, game logic, dynamic content, bot integration, and the timed adoption system.
+
+Three.js (r128): A powerful 3D JavaScript library for rendering the "Cat-ch Me If You Can" game.
+
+GLTFLoader.js: Used to load complex 3D models in GLTF/GLB format into the Three.js scene.
+
+Web Storage (LocalStorage): For persistently storing user progress, adopted pets, and coin balances.
+
+Sound Assets: For background music and in-game sound effects.
+
+Image Assets: For backgrounds, textures, and UI elements.
+
+Google Fonts (Quicksand): For consistent and friendly typography.
+
+# Assets & Media
+3D Models:
+
+./models/scene.gltf (Player Cat Model)
+
+./models/Muchkin2_baseColor.png (Cat Texture)
+
+./models/mouse.glb (Collectible Mouse Model)
+
+./models/dog.glb (Enemy Dog Model)
+
+./models/desktop_design_cute.glb (In-game obstacle/decoration)
+
+./models/rat_plushy.glb (In-game obstacle/decoration)
+
+./models/slide_playground.glb (In-game walkable obstacle/decoration)
+
+./models/pink_house.glb (In-game obstacle/decoration)
+
+./models/paper_box.glb (In-game obstacle/decoration)
+
+./models/japanese_cherry_tree_low-poly.glb (In-game obstacle/decoration)
+
+# Textures & Backgrounds:
+
+grass.jpeg (Ground and Scene Background Texture for the game)
+
+background-chase.jpg (Background image for the game's start screen)
+
+# Audio Files:
+
+comedy.mp3 (Background music for the game)
+
+win.mp3 (Sound effect for game win)
+
+loose.mp3 (Sound effect for game over)
+
+kitz.mp3 (Sound effect for collecting a mouse)
