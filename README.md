@@ -1,7 +1,7 @@
 # Adopt & Learn: Play with Your Buddy!
 Welcome to Adopt & Learn — an interactive web experience designed to educate and entertain users about pet care and animal adoption, featuring a fun mini-game where you can play with your virtual buddy!
 
-About the Project
+## About the Project
 "Saving lives (and having fun) is just a click away!"
 
 This web app simulates a heartwarming world where users can:
@@ -18,7 +18,7 @@ Interact with a Bot: Get quick answers and announcements to enhance the learning
 
 Experience a 3D Play Area: Dive into an immersive environment for the mini-game.
 
-Inspired by the joy of pet ownership and the importance of responsible care, we aim to make people more aware of animals in need and the fun of interacting with them, all within an engaging and playful setting.
+Inspired by the joy of pet ownership and the importance of responsible care, I aim to make people more aware of animals in need and the fun of interacting with them, all within an engaging and playful setting.
 
 ## Core Functionality
 To stimulate continuous engagement and learning, "Adopt & Learn" features a unique gameplay loop:
@@ -39,7 +39,7 @@ Post-Adoption Actions: After successfully adopting an animal, two key options be
 
 "Play Game" Button: Dive into the exciting 3D mini-game "Cat-ch Me If You Can" with your buddy.
 
-# Features
+## Features
 Games
 "Cat-ch Me If You Can"
 
@@ -63,7 +63,7 @@ Restart/Back to Site: Options at game over/win.
 
 Cash Award Popups: Notifies you of earned coins post-game.
 
-# User Interface & Experience
+## User Interface & Experience
 Loading & Error Handling: Provides feedback during 3D model loading.
 
 Instructions Display: Clear in-game controls and objectives.
@@ -71,7 +71,7 @@ Instructions Display: Clear in-game controls and objectives.
 Audio Controls: Toggle music and adjust volume for an immersive experience.
 
 Personalization: Display your chosen buddy's name and image.
-# Technologies Used
+## Technologies Used
 HTML5 / CSS3: For the structure and styling of the web pages, including responsive design.
 
 JavaScript (Vanilla): For all interactive elements, game logic, dynamic content, bot integration, and the timed adoption system.
@@ -88,7 +88,7 @@ Image Assets: For backgrounds, textures, and UI elements.
 
 Google Fonts (Quicksand): For consistent and friendly typography.
 
-# Assets & Media
+## Assets & Media
 3D Models:
 
 ./models/scene.gltf (Player Cat Model)
@@ -111,13 +111,13 @@ Google Fonts (Quicksand): For consistent and friendly typography.
 
 ./models/japanese_cherry_tree_low-poly.glb (In-game obstacle/decoration)
 
-# Textures & Backgrounds:
+## Textures & Backgrounds:
 
 grass.jpeg (Ground and Scene Background Texture for the game)
 
 background-chase.jpg (Background image for the game's start screen)
 
-# Audio Files:
+## Audio Files:
 
 comedy.mp3 (Background music for the game)
 
