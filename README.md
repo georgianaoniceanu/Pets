@@ -140,7 +140,7 @@ assets/audio/loose.mp3 # Sound effect for game over
 
 assets/audio/kitz.mp3 # Sound effect for collecting a mouse
 
-assets/images/grass.jpeg # Ground and Scene Background Texture for the game
+assets/images/grass.jpg # Ground Texture for the game
 
 assets/images/background-chase.jpg # Background image for the game's start screen
 
