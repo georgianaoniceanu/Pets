@@ -410,7 +410,7 @@
         // ADDED: Ground plane with grass.jpeg texture
         const groundSize = 50; // Match this to your intended playable area size
         const grassTextureLoader = new THREE.TextureLoader();
-        grassTextureLoader.load('grass.jpeg', function(grassTexture) {
+        grassTextureLoader.load('grass.jpg', function(grassTexture) {
             grassTexture.wrapS = THREE.RepeatWrapping;
             grassTexture.wrapT = THREE.RepeatWrapping;
             grassTexture.repeat.set(groundSize / 5, groundSize / 5); // Adjust tiling as needed
@@ -698,7 +698,8 @@
             { path: './models/slide_playground.glb', scale: new THREE.Vector3(2, 2, 2), position: new THREE.Vector3(5, 0, 0), rotation: new THREE.Vector3(0, Math.PI / 2, 0), walkable: true },
             { path: './models/pink_house.glb', scale: new THREE.Vector3(2, 2, 2), position: new THREE.Vector3(-15, 0, 10), rotation: new THREE.Vector3(0, Math.PI / 4, 0) },
             { path: './models/paper_box.glb', scale: new THREE.Vector3(1, 1, 1), position: new THREE.Vector3(8, 0, -8), rotation: new THREE.Vector3(0, Math.PI / 8, 0) },
-            { path: './models/japanese_cherry_tree_low-poly.glb', scale: new THREE.Vector3(4, 4, 4), position: new THREE.Vector3(20, 0, -5), rotation: new THREE.Vector3(0, 0, 0) }
+            { path: './models/japanese_cherry_tree_low-poly.glb', scale: new THREE.Vector3(4, 4, 4), position: new THREE.Vector3(20, 0, -5), rotation: new THREE.Vector3(0, 0, 0) },
+            { path: './models/house_int.glb', scale: new THREE.Vector3(2, 2, 2), position: new THREE.Vector3(-10, 0, -10), rotation: new THREE.Vector3(0, Math.PI / 2, 0) }
         ];
 
         otherModels.forEach(m => {
