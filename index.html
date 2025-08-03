@@ -829,7 +829,7 @@
             // Reconstruct availableAnimals based on allAnimals and saved names
             availableAnimals = allAnimals.filter(animal => names.includes(animal.name));
         } else {
-            // If no saved available animals, all animals are initially available
+            // If no saved available animals, or after a full reset, all animals are initially available
             availableAnimals = [...allAnimals];
         }
 
@@ -1024,26 +1024,26 @@
 
     function resetProgress() {
         if (confirm("Are you sure you want to reset all your progress? This cannot be undone!")) {
-            // Clear local storage items
+            // Clear all relevant local storage items
             localStorage.removeItem('studyMinutes');
             localStorage.removeItem('adoptedBuddies');
-            localStorage.removeItem('availableAnimalNames');
+            localStorage.removeItem('availableAnimalNames'); // Crucial for resetting available animals
             localStorage.removeItem('conversationHistory');
             localStorage.removeItem('virtualCoins');
-            localStorage.setItem('timerRunning', 'false'); // Explicitly set to false on reset
-            localStorage.removeItem('buyingItemName');
-            localStorage.removeItem('buyingItemPrice');
-            localStorage.removeItem('gameCoinsEarned');
+            localStorage.removeItem('timerRunning'); // Explicitly set to false or remove
+            localStorage.removeItem('buyingItemName'); // Clear any pending shop purchases
+            localStorage.removeItem('buyingItemPrice'); // Clear any pending shop purchases
+            localStorage.removeItem('gameCoinsEarned'); // Clear any pending game coins
 
 
             // Reset in-memory variables to initial states
             minutes = 0;
             availableAdoptions = 0;
-            timerRunning = false;
+            timerRunning = false; // Ensure this is explicitly false
             virtualCoins = 0;
-            adoptedBuddies = [];
-            conversationHistory = [{ sender: 'bot', text: 'Hello there! How can I help you today?' }];
-            availableAnimals = [...allAnimals]; // Reset available animals to all original animals
+            adoptedBuddies = []; // Reset adopted pets
+            conversationHistory = [{ sender: 'bot', text: 'Hello there! How can I help you today?' }]; // Reset chat
+            availableAnimals = [...allAnimals]; // IMPORTANT: Reset available animals to ALL original animals
 
             // Clear timer if it's running
             clearInterval(timerInterval);
